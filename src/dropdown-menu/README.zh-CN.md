@@ -1,5 +1,9 @@
 # DropdownMenu 下拉菜单
 
+### 介绍
+
+向下弹出的菜单列表。
+
 ### 引入
 
 ```js
@@ -44,7 +48,7 @@ export default {
 
 ### 自定义菜单内容
 
-通过插槽可以自定义`DropdownItem`的内容，此时需要使用实例上的`toggle`方法手动控制菜单的显示
+通过插槽可以自定义 `DropdownItem` 的内容，此时需要使用实例上的 `toggle` 方法手动控制菜单的显示。
 
 ```html
 <van-dropdown-menu>
@@ -93,7 +97,7 @@ export default {
 
 ### 自定义选中态颜色
 
-通过`active-color`属性可以自定义菜单标题和选项的选中态颜色
+通过 `active-color` 属性可以自定义菜单标题和选项的选中态颜色。
 
 ```html
 <van-dropdown-menu active-color="#1989fa">
@@ -104,7 +108,7 @@ export default {
 
 ### 向上展开
 
-将`direction`属性值设置为`up`，菜单即可向上展开
+将 `direction` 属性值设置为 `up`，菜单即可向上展开。
 
 ```html
 <van-dropdown-menu direction="up">
@@ -167,11 +171,11 @@ export default {
 
 ### DropdownItem 方法
 
-通过 ref 可以获取到 DropdownItem 实例并调用实例方法，详见[组件实例方法](#/zh-CN/quickstart#zu-jian-shi-li-fang-fa)
+通过 ref 可以获取到 DropdownItem 实例并调用实例方法，详见[组件实例方法](#/zh-CN/quickstart#zu-jian-shi-li-fang-fa)。
 
 | 方法名 | 说明 | 参数 | 返回值 |
 | --- | --- | --- | --- |
-| toggle | 切换菜单展示状态，传`true`为显示，`false`为隐藏，不传参为取反 | show?: boolean | - |
+| toggle | 切换菜单展示状态，传 `true` 为显示，`false` 为隐藏，不传参为取反 | _show?: boolean_ | - |
 
 ### Option 数据结构
 

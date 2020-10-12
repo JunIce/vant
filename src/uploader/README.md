@@ -136,8 +136,8 @@ export default {
 <style>
   .preview-cover {
     position: absolute;
-    box-sizing: border-box;
     bottom: 0;
+    box-sizing: border-box;
     width: 100%;
     padding: 4px;
     color: #fff;
@@ -253,7 +253,7 @@ Use `disabled` prop to disable uploader.
 
 ### Methods
 
-Use [ref](https://vuejs.org/v2/api/#ref) to get Uploader instance and call instance methods
+Use [ref](https://vuejs.org/v2/api/#ref) to get Uploader instance and call instance methods.
 
 | Name | Description | Attribute | Return value |
 | --- | --- | --- | --- |
