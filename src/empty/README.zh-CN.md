@@ -2,15 +2,18 @@
 
 ### 介绍
 
-空状态时的占位提示，2.6 版本开始支持此组件。
+空状态时的占位提示。
 
 ### 引入
 
+通过以下方式来全局注册组件，更多注册方式请参考[组件注册](#/zh-CN/advanced-usage#zu-jian-zhu-ce)。
+
 ```js
-import Vue from 'vue';
+import { createApp } from 'vue';
 import { Empty } from 'vant';
 
-Vue.use(Empty);
+const app = createApp();
+app.use(Empty);
 ```
 
 ## 代码演示
@@ -59,9 +62,7 @@ Empty 组件内置了多种占位图片类型，可以在不同业务场景下�
 
 ```html
 <van-empty description="描述文字">
-  <van-button round type="danger" class="bottom-button">
-    按钮
-  </van-button>
+  <van-button round type="danger" class="bottom-button">按钮</van-button>
 </van-empty>
 
 <style>
@@ -79,6 +80,7 @@ Empty 组件内置了多种占位图片类型，可以在不同业务场景下�
 | 参数 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
 | image | 图片类型，可选值为 `error` `network` `search`，支持传入图片 URL | _string_ | `default` |
+| image-size | 图片大小，默认单位为 `px` | _number \| string_ | - |
 | description | 图片下方的描述文字 | _string_ | - |
 
 ### Slots
@@ -88,3 +90,18 @@ Empty 组件内置了多种占位图片类型，可以在不同业务场景下�
 | default     | 自定义底部内容 |
 | image       | 自定义图标     |
 | description | 自定义描述文字 |
+
+### 样式变量
+
+组件提供了下列 Less 变量，可用于自定义样式，使用方法请参考[主题定制](#/zh-CN/theme)。
+
+| 名称                           | 默认值            | 描述 |
+| ------------------------------ | ----------------- | ---- |
+| @empty-padding                 | `@padding-xl 0`   | -    |
+| @empty-image-size              | `160px`           | -    |
+| @empty-description-margin-top  | `@padding-md`     | -    |
+| @empty-description-padding     | `0 60px`          | -    |
+| @empty-description-color       | `@gray-6`         | -    |
+| @empty-description-font-size   | `@font-size-md`   | -    |
+| @empty-description-line-height | `@line-height-md` | -    |
+| @empty-bottom-margin-top       | `24px`            | -    |

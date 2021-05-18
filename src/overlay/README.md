@@ -1,12 +1,19 @@
 # Overlay
 
+### Intro
+
+Create a mask layer to emphasize specific page elements and prevent users from performing other operations.
+
 ### Install
 
+Register component globally via `app.use`, refer to [Component Registration](#/en-US/advanced-usage#zu-jian-zhu-ce) for more registration ways.
+
 ```js
-import Vue from 'vue';
+import { createApp } from 'vue';
 import { Overlay } from 'vant';
 
-Vue.use(Overlay);
+const app = createApp();
+app.use(Overlay);
 ```
 
 ## Usage
@@ -19,13 +26,14 @@ Vue.use(Overlay);
 ```
 
 ```js
+import { ref } from 'vue';
+
 export default {
-  data() {
-    return {
-      show: false
-    }
-  }
-},
+  setup() {
+    const show = ref(false);
+    return { show };
+  },
+};
 ```
 
 ### Embedded Content
@@ -64,16 +72,25 @@ export default {
 | duration | Animation duration | _number \| string_ | `0.3` |
 | class-name | ClassName | _string_ | - |
 | custom-class | Custom style | _object_ | - |
-| lock-scroll `v2.6.2` | Whether to lock background scroll | _boolean_ | `true` |
+| lock-scroll | Whether to lock background scroll | _boolean_ | `true` |
 
 ### Events
 
-| Event | Description            | Arguments      |
-| ----- | ---------------------- | -------------- |
-| click | Triggered when clicked | _event: Event_ |
+| Event | Description                       | Arguments           |
+| ----- | --------------------------------- | ------------------- |
+| click | Emitted when component is clicked | _event: MouseEvent_ |
 
 ### Slots
 
 | Name    | Description  |
 | ------- | ------------ |
 | default | Default slot |
+
+### Less Variables
+
+How to use: [Custom Theme](#/en-US/theme).
+
+| Name                      | Default Value        | Description |
+| ------------------------- | -------------------- | ----------- |
+| @overlay-z-index          | `1`                  | -           |
+| @overlay-background-color | `rgba(0, 0, 0, 0.7)` | -           |

@@ -2,16 +2,19 @@
 
 ### Intro
 
-The PasswordInput component is usually used with [NumberKeyboard](#/en-US/number-keyboard) Component.
+The passwordinput component is usually used with [NumberKeyboard](#/en-US/number-keyboard) Component.
 
 ### Install
 
+Register component globally via `app.use`, refer to [Component Registration](#/en-US/advanced-usage#zu-jian-zhu-ce) for more registration ways.
+
 ```js
-import Vue from 'vue';
+import { createApp } from 'vue';
 import { PasswordInput, NumberKeyboard } from 'vant';
 
-Vue.use(PasswordInput);
-Vue.use(NumberKeyboard);
+const app = createApp();
+app.use(PasswordInput);
+app.use(NumberKeyboard);
 ```
 
 ## Usage
@@ -32,11 +35,16 @@ Vue.use(NumberKeyboard);
 ```
 
 ```js
+import { ref } from 'vue';
+
 export default {
-  data() {
+  setup() {
+    const value = ref('123');
+    const showKeyboard = ref(true);
+
     return {
-      value: '123',
-      showKeyboard: true,
+      value,
+      showKeyboard,
     };
   },
 };
@@ -95,22 +103,27 @@ Use `info` to set info message, use `error-info` prop to set error message.
 ```
 
 ```js
+import { ref, watch } from 'vue';
+
 export default {
-  data() {
-    return {
-      value: '123',
-      errorInfo: '',
-      showKeyboard: true,
-    };
-  },
-  watch: {
-    value(value) {
-      if (value.length === 6 && value !== '123456') {
-        this.errorInfo = 'Password Mistake';
+  setup() {
+    const value = ref('123');
+    const errorInfo = ref('');
+    const showKeyboard = ref(true);
+
+    watch(value, (newVal) => {
+      if (newVal.length === 6 && newVal !== '123456') {
+        errorInfo.value = 'Password Mistake';
       } else {
-        this.errorInfo = '';
+        errorInfo.value = '';
       }
-    },
+    });
+
+    return {
+      value,
+      errorInfo,
+      showKeyboard,
+    };
   },
 };
 ```
@@ -131,6 +144,27 @@ export default {
 
 ### Events
 
-| Event | Description                      | Arguments |
-| ----- | -------------------------------- | --------- |
-| focus | Triggered when input get focused | -         |
+| Event | Description                   | Arguments |
+| ----- | ----------------------------- | --------- |
+| focus | Emitted when input is focused | -         |
+
+### Less Variables
+
+How to use: [Custom Theme](#/en-US/theme).
+
+| Name                                      | Default Value   | Description |
+| ----------------------------------------- | --------------- | ----------- |
+| @password-input-height                    | `50px`          | -           |
+| @password-input-margin                    | `0 @padding-md` | -           |
+| @password-input-font-size                 | `20px`          | -           |
+| @password-input-border-radius             | `6px`           | -           |
+| @password-input-background-color          | `@white`        | -           |
+| @password-input-info-color                | `@gray-6`       | -           |
+| @password-input-info-font-size            | `@font-size-md` | -           |
+| @password-input-error-info-color          | `@red`          | -           |
+| @password-input-dot-size                  | `10px`          | -           |
+| @password-input-dot-color                 | `@black`        | -           |
+| @password-input-cursor-color              | `@text-color`   | -           |
+| @password-input-cursor-width              | `1px`           | -           |
+| @password-input-cursor-height             | `40%`           | -           |
+| @password-input-cursor-animation-duration | `1s`            | -           |

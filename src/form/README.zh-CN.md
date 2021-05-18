@@ -2,15 +2,18 @@
 
 ### 介绍
 
-用于数据录入、校验，支持输入框、单选框、复选框、文件上传等类型，2.5 版本开始支持此组件。
+用于数据录入、校验，支持输入框、单选框、复选框、文件上传等类型。
 
 ### 引入
 
+通过以下方式来全局注册组件，更多注册方式请参考[组件注册](#/zh-CN/advanced-usage#zu-jian-zhu-ce)。
+
 ```js
-import Vue from 'vue';
+import { createApp } from 'vue';
 import { Form } from 'vant';
 
-Vue.use(Form);
+const app = createApp();
+app.use(Form);
 ```
 
 ## 代码演示
@@ -22,14 +25,14 @@ Vue.use(Form);
 ```html
 <van-form @submit="onSubmit">
   <van-field
-    v-model="username"
+    v-model="state.username"
     name="用户名"
     label="用户名"
     placeholder="用户名"
     :rules="[{ required: true, message: '请填写用户名' }]"
   />
   <van-field
-    v-model="password"
+    v-model="state.password"
     type="password"
     name="密码"
     label="密码"
@@ -37,7 +40,7 @@ Vue.use(Form);
     :rules="[{ required: true, message: '请填写密码' }]"
   />
   <div style="margin: 16px;">
-    <van-button round block type="info" native-type="submit">
+    <van-button round block type="primary" native-type="submit">
       提交
     </van-button>
   </div>
@@ -45,50 +48,62 @@ Vue.use(Form);
 ```
 
 ```js
+import { reactive } from 'vue';
+
 export default {
-  data() {
-    return {
+  setup() {
+    const state = reactive({
       username: '',
       password: '',
-    };
-  },
-  methods: {
-    onSubmit(values) {
+    });
+    const onSubmit = (values) => {
       console.log('submit', values);
-    },
+    };
+
+    return {
+      state,
+      onSubmit,
+    };
   },
 };
 ```
 
 ### 校验规则
 
-通过 `rules` 定义表单校验规则，可用字段见[下方表格](#/zh-CN/form#rule-shu-ju-jie-gou)。
+通过 `rules` 定义表单校验规则，所有可用字段见[下方表格](#/zh-CN/form#rule-shu-ju-jie-gou)。
 
 ```html
-<van-form validate-first @failed="onFailed">
+<van-form @failed="onFailed">
   <!-- 通过 pattern 进行正则校验 -->
   <van-field
-    v-model="value1"
+    v-model="state.value1"
     name="pattern"
     placeholder="正则校验"
     :rules="[{ pattern, message: '请输入正确内容' }]"
   />
   <!-- 通过 validator 进行函数校验 -->
   <van-field
-    v-model="value2"
+    v-model="state.value2"
     name="validator"
     placeholder="函数校验"
     :rules="[{ validator, message: '请输入正确内容' }]"
   />
+  <!-- 通过 validator 返回错误提示 -->
+  <van-field
+    v-model="state.value3"
+    name="validatorMessage"
+    placeholder="校验函数返回错误提示"
+    :rules="[{ validator: validatorMessage }]"
+  />
   <!-- 通过 validator 进行异步函数校验 -->
   <van-field
-    v-model="value3"
+    v-model="state.value4"
     name="asyncValidator"
     placeholder="异步函数校验"
     :rules="[{ validator: asyncValidator, message: '请输入正确内容' }]"
   />
   <div style="margin: 16px;">
-    <van-button round block type="info" native-type="submit">
+    <van-button round block type="primary" native-type="submit">
       提交
     </van-button>
   </div>
@@ -96,25 +111,28 @@ export default {
 ```
 
 ```js
+import { reactive } from 'vue';
 import { Toast } from 'vant';
 
 export default {
-  data() {
-    return {
+  setup() {
+    const state = reactive({
       value1: '',
       value2: '',
       value3: '',
-      pattern: /\d{6}/,
-    };
-  },
-  methods: {
+      value4: '',
+    });
+    const pattern = /\d{6}/;
+
     // 校验函数返回 true 表示校验通过，false 表示不通过
-    validator(val) {
-      return /1\d{10}/.test(val);
-    },
-    // 异步校验函数返回 Promise
-    asyncValidator(val) {
-      return new Promise((resolve) => {
+    const validator = (val) => /1\d{10}/.test(val);
+
+    // 校验函数可以直接返回一段错误提示
+    const validatorMessage = (val) => `${val} 不合法，请重新输入`;
+
+    // 校验函数可以返回 Promise，实现异步校验
+    const asyncValidator = (val) =>
+      new Promise((resolve) => {
         Toast.loading('验证中...');
 
         setTimeout(() => {
@@ -122,10 +140,18 @@ export default {
           resolve(/\d{6}/.test(val));
         }, 1000);
       });
-    },
-    onFailed(errorInfo) {
+
+    const onFailed = (errorInfo) => {
       console.log('failed', errorInfo);
-    },
+    };
+
+    return {
+      state,
+      pattern,
+      onFailed,
+      validator,
+      asyncValidator,
+    };
   },
 };
 ```
@@ -137,17 +163,18 @@ export default {
 ```html
 <van-field name="switch" label="开关">
   <template #input>
-    <van-switch v-model="switchChecked" size="20" />
+    <van-switch v-model="checked" size="20" />
   </template>
 </van-field>
 ```
 
 ```js
+import { ref } from 'vue';
+
 export default {
-  data() {
-    return {
-      switchChecked: false,
-    };
+  setup() {
+    const checked = ref(false);
+    return { checked };
   },
 };
 ```
@@ -159,12 +186,12 @@ export default {
 ```html
 <van-field name="checkbox" label="复选框">
   <template #input>
-    <van-checkbox v-model="checkbox" shape="square" />
+    <van-checkbox v-model="checked" shape="square" />
   </template>
 </van-field>
 <van-field name="checkboxGroup" label="复选框组">
   <template #input>
-    <van-checkbox-group v-model="checkboxGroup" direction="horizontal">
+    <van-checkbox-group v-model="groupChecked" direction="horizontal">
       <van-checkbox name="1" shape="square">复选框 1</van-checkbox>
       <van-checkbox name="2" shape="square">复选框 2</van-checkbox>
     </van-checkbox-group>
@@ -173,11 +200,15 @@ export default {
 ```
 
 ```js
+import { ref } from 'vue';
+
 export default {
-  data() {
+  setup() {
+    const checked = ref(false);
+    const groupChecked = ref([]);
     return {
-      checkbox: false,
-      checkboxGroup: [],
+      checked,
+      groupChecked,
     };
   },
 };
@@ -190,7 +221,7 @@ export default {
 ```html
 <van-field name="radio" label="单选框">
   <template #input>
-    <van-radio-group v-model="radio" direction="horizontal">
+    <van-radio-group v-model="checked" direction="horizontal">
       <van-radio name="1">单选框 1</van-radio>
       <van-radio name="2">单选框 2</van-radio>
     </van-radio-group>
@@ -199,11 +230,12 @@ export default {
 ```
 
 ```js
+import { ref } from 'vue';
+
 export default {
-  data() {
-    return {
-      radio: '1',
-    };
+  setup() {
+    const checked = ref('1');
+    return { checked };
   },
 };
 ```
@@ -215,17 +247,18 @@ export default {
 ```html
 <van-field name="stepper" label="步进器">
   <template #input>
-    <van-stepper v-model="stepper" />
+    <van-stepper v-model="value" />
   </template>
 </van-field>
 ```
 
 ```js
+import { ref } from 'vue';
+
 export default {
-  data() {
-    return {
-      stepper: 1,
-    };
+  setup() {
+    const value = ref(1);
+    return { value };
   },
 };
 ```
@@ -237,17 +270,18 @@ export default {
 ```html
 <van-field name="rate" label="评分">
   <template #input>
-    <van-rate v-model="rate" />
+    <van-rate v-model="value" />
   </template>
 </van-field>
 ```
 
 ```js
+import { ref } from 'vue';
+
 export default {
-  data() {
-    return {
-      rate: 3,
-    };
+  setup() {
+    const value = ref(3);
+    return { value };
   },
 };
 ```
@@ -259,17 +293,18 @@ export default {
 ```html
 <van-field name="slider" label="滑块">
   <template #input>
-    <van-slider v-model="slider" />
+    <van-slider v-model="value" />
   </template>
 </van-field>
 ```
 
 ```js
+import { ref } from 'vue';
+
 export default {
-  data() {
-    return {
-      slider: 50,
-    };
+  setup() {
+    const value = ref(50);
+    return { value };
   },
 };
 ```
@@ -281,17 +316,18 @@ export default {
 ```html
 <van-field name="uploader" label="文件上传">
   <template #input>
-    <van-uploader v-model="uploader" />
+    <van-uploader v-model="value" />
   </template>
 </van-field>
 ```
 
 ```js
+import { ref } from 'vue';
+
 export default {
-  data() {
-    return {
-      uploader: [{ url: 'https://img.yzcdn.cn/vant/leaf.jpg' }],
-    };
+  setup() {
+    const value = ref([{ url: 'https://img.yzcdn.cn/vant/leaf.jpg' }]);
+    return { value };
   },
 };
 ```
@@ -302,38 +338,44 @@ export default {
 
 ```html
 <van-field
+  v-model="state.value"
   readonly
   clickable
   name="picker"
-  :value="value"
   label="选择器"
   placeholder="点击选择城市"
-  @click="showPicker = true"
+  @click="state.showPicker = true"
 />
-<van-popup v-model="showPicker" position="bottom">
+<van-popup v-model:show="state.showPicker" position="bottom">
   <van-picker
-    show-toolbar
     :columns="columns"
     @confirm="onConfirm"
-    @cancel="showPicker = false"
+    @cancel="state.showPicker = false"
   />
 </van-popup>
 ```
 
 ```js
+import { reactive } from 'vue';
+
 export default {
-  data() {
-    return {
+  setup() {
+    const state = reactive({
       value: '',
-      columns: ['杭州', '宁波', '温州', '嘉兴', '湖州'],
       showPicker: false,
+    });
+    const columns = ['杭州', '宁波', '温州', '嘉兴', '湖州'];
+
+    const onConfirm = (value) => {
+      state.value = value;
+      state.showPicker = false;
     };
-  },
-  methods: {
-    onConfirm(value) {
-      this.value = value;
-      this.showPicker = false;
-    },
+
+    return {
+      state,
+      columns,
+      onConfirm,
+    };
   },
 };
 ```
@@ -344,36 +386,41 @@ export default {
 
 ```html
 <van-field
+  v-model="state.value"
   readonly
   clickable
   name="datetimePicker"
-  :value="value"
   label="时间选择"
   placeholder="点击选择时间"
-  @click="showPicker = true"
+  @click="state.showPicker = true"
 />
-<van-popup v-model="showPicker" position="bottom">
+<van-popup v-model:show="state.showPicker" position="bottom">
   <van-datetime-picker
     type="time"
     @confirm="onConfirm"
-    @cancel="showPicker = false"
+    @cancel="state.showPicker = false"
   />
 </van-popup>
 ```
 
 ```js
+import { reactive } from 'vue';
+
 export default {
-  data() {
-    return {
+  setup() {
+    const state = reactive({
       value: '',
       showPicker: false,
+    });
+    const onConfirm = (value) => {
+      state.value = value;
+      state.showPicker = false;
     };
-  },
-  methods: {
-    onConfirm(time) {
-      this.value = time;
-      this.showPicker = false;
-    },
+
+    return {
+      state,
+      onConfirm,
+    };
   },
 };
 ```
@@ -384,40 +431,45 @@ export default {
 
 ```html
 <van-field
+  v-model="state.value"
   readonly
   clickable
   name="area"
-  :value="value"
   label="地区选择"
   placeholder="点击选择省市区"
-  @click="showArea = true"
+  @click="state.showArea = true"
 />
-<van-popup v-model="showArea" position="bottom">
+<van-popup v-model:show="state.showArea" position="bottom">
   <van-area
     :area-list="areaList"
     @confirm="onConfirm"
-    @cancel="showArea = false"
+    @cancel="state.showArea = false"
   />
 </van-popup>
 ```
 
 ```js
+import { reactive } from 'vue';
+
 export default {
-  data() {
-    return {
+  setup() {
+    const state = reactive({
       value: '',
       showArea: false,
-      areaList: {}, // 数据格式见 Area 组件文档
-    };
-  },
-  methods: {
-    onConfirm(values) {
-      this.value = values
+    });
+    const onConfirm = (value) => {
+      state.showArea = false;
+      state.value = values
         .filter((item) => !!item)
         .map((item) => item.name)
         .join('/');
-      this.showArea = false;
-    },
+    };
+
+    return {
+      state,
+      areaList: {}, // 数据格式见 Area 组件文档
+      onConfirm,
+    };
   },
 };
 ```
@@ -428,30 +480,35 @@ export default {
 
 ```html
 <van-field
+  v-model="state.value"
   readonly
   clickable
   name="calendar"
-  :value="value"
   label="日历"
   placeholder="点击选择日期"
-  @click="showCalendar = true"
+  @click="state.showCalendar = true"
 />
-<van-calendar v-model="showCalendar" @confirm="onConfirm" />
+<van-calendar v-model:show="state.showCalendar" @confirm="onConfirm" />
 ```
 
 ```js
+import { reactive } from 'vue';
+
 export default {
-  data() {
-    return {
+  setup() {
+    const state = reactive({
       value: '',
       showCalendar: false,
+    });
+    const onConfirm = (date) => {
+      state.value = `${date.getMonth() + 1}/${date.getDate()}`;
+      state.showCalendar = false;
     };
-  },
-  methods: {
-    onConfirm(date) {
-      this.value = `${date.getMonth() + 1}/${date.getDate()}`;
-      this.showCalendar = false;
-    },
+
+    return {
+      state,
+      onConfirm,
+    };
   },
 };
 ```
@@ -466,13 +523,15 @@ export default {
 | label-align |  表单项 label 对齐方式，可选值为 `center` `right` | _string_ | `left` |
 | input-align | 输入框对齐方式，可选值为 `center` `right` | _string_ | `left` |
 | error-message-align | 错误提示文案对齐方式，可选值为 `center` `right` | _string_ | `left` |
-| validate-trigger `v2.5.2` | 表单校验触发时机，可选值为 `onChange`、`onSubmit`，详见下表 | _string_ | `onBlur` |
+| validate-trigger | 表单校验触发时机，可选值为 `onChange`、`onSubmit`，详见下表 | _string_ | `onBlur` |
 | colon | 是否在 label 后面添加冒号 | _boolean_ | `false` |
+| disabled | 是否禁用表单中的所有输入框 | _boolean_ | `false` |
+| readonly | 是否将表单中的所有输入框设置为只读状态 | _boolean_ | `false` |
 | validate-first | 是否在某一项校验不通过时停止校验 | _boolean_ | `false` |
-| scroll-to-error `v2.5.2` | 是否在提交表单且校验不通过时滚动至错误的表单项 | _boolean_ | `false` |
-| show-error `v2.6.0` | 是否在校验不通过时标红输入框 | _boolean_ | `true` |
-| show-error-message `v2.5.8` | 是否在校验不通过时在输入框下方展示错误提示 | _boolean_ | `true` |
-| submit-on-enter `v2.8.3` | 是否在按下回车键时提交表单 | _boolean_ | `true` |
+| scroll-to-error | 是否在提交表单且校验不通过时滚动至错误的表单项 | _boolean_ | `false` |
+| show-error | 是否在校验不通过时标红输入框 | _boolean_ | `false` |
+| show-error-message | 是否在校验不通过时在输入框下方展示错误提示 | _boolean_ | `true` |
+| submit-on-enter | 是否在按下回车键时提交表单 | _boolean_ | `true` |
 
 > 表单项的 API 参见：[Field 组件](#/zh-CN/field#api)
 
@@ -483,11 +542,11 @@ export default {
 | 键名 | 说明 | 类型 |
 | --- | --- | --- |
 | required | 是否为必选字段 | _boolean_ |
-| message `v2.5.3` | 错误提示文案 | _string \| (value, rule) => string_ |
-| validator `v2.5.3` | 通过函数进行校验 | _(value, rule) => boolean \| Promise_ |
-| pattern `v2.5.3` | 通过正则表达式进行校验 | _RegExp_ |
-| trigger `v2.5.2` | 本项规则的触发时机，可选值为`onChange`、`onBlur` | _string_ |
-| formatter `v2.5.3` | 格式化函数，将表单项的值转换后进行校验 | _(value, rule) => any_ |
+| message | 错误提示文案 | _string \| (value, rule) => string_ |
+| validator | 通过函数进行校验 | _(value, rule) => boolean \| string \| Promise_ |
+| pattern | 通过正则表达式进行校验 | _RegExp_ |
+| trigger | 本项规则的触发时机，可选值为 `onChange`、`onBlur` | _string_ |
+| formatter | 格式化函数，将表单项的值转换后进行校验 | _(value, rule) => any_ |
 
 ### validate-trigger  可选值
 
@@ -508,31 +567,17 @@ export default {
 
 ### 方法
 
-通过 ref 可以获取到 Form 实例并调用实例方法，详见[组件实例方法](#/zh-CN/quickstart#zu-jian-shi-li-fang-fa)。
+通过 ref 可以获取到 Form 实例并调用实例方法，详见[组件实例方法](#/zh-CN/advanced-usage#zu-jian-shi-li-fang-fa)。
 
 | 方法名 | 说明 | 参数 | 返回值 |
 | --- | --- | --- | --- |
 | submit | 提交表单，与点击提交按钮的效果等价 | - | - |
-| validate | 验证表单，支持传入`name`来验证单个表单项 | _name?: string_ | _Promise_ |
-| resetValidation | 重置表单项的验证提示，支持传入`name`来重置单个表单项 | _name?: string_ | - |
-| scrollToField `v2.8.3` | 滚动到对应表单项的位置，默认滚动到顶部，第二个参数传 false 可滚动至底部 | _name: string, alignToTop: boolean_ | - |
+| validate | 验证表单，支持传入 `name` 来验证单个或部分表单项 | _name?: string \| string[]_ | _Promise_ |
+| resetValidation | 重置表单项的验证提示，支持传入 `name` 来重置单个或部分表单项 | _name?: string \| string[]_ | - |
+| scrollToField | 滚动到对应表单项的位置，默认滚动到顶部，第二个参数传 false 可滚动至底部 | _name: string, alignToTop: boolean_ | - |
 
 ### Slots
 
 | 名称    | 说明     |
 | ------- | -------- |
 | default | 表单内容 |
-
-## 常见问题
-
-### 点击表单中的普通按钮为什么会触发表单提交？
-
-在表单中，除了提交按钮外，可能还有一些其他的功能性按钮，如发送验证码按钮。在使用这些按钮时，要注意将`native-type`设置为`button`，否则会触发表单提交。
-
-```html
-<van-button native-type="button">
-  发送验证码
-</van-button>
-```
-
-这个问题的原因是浏览器中 button 标签 type 属性的默认值为`submit`，导致触发表单提交。我们会在下个大版本中将 type 的默认值调整为`button`来避免这个问题。

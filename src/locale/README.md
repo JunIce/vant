@@ -2,7 +2,7 @@
 
 ### Intro
 
-The default language of Vant is Chinese. If you want to use other languages, you can follow the instructions below.
+Vant uses Chinese as the default language. If you want to use other languages, please follow the instructions below.
 
 ## Usage
 
@@ -44,14 +44,15 @@ Current supported languages:
 | Chinese                  | zh-CN        |
 | Traditional Chinese (HK) | zh-HK        |
 | Traditional Chinese (TW) | zh-TW        |
-| English                  | en-US        |
 | German                   | de-DE        |
 | German (formal)          | de-DE-formal |
-| Norwegian                | nb-NO        |
-| Japanese                 | ja-JP        |
-| Romanian                 | ro-RO        |
+| English                  | en-US        |
 | Spanish (Spain)          | es-ES        |
+| Japanese                 | ja-JP        |
+| Norwegian                | nb-NO        |
+| Romanian                 | ro-RO        |
 | Turkish                  | tr-TR        |
+| Thai                     | th-TH        |
 
 > View all language configs [Here](https://github.com/youzan/vant/tree/dev/src/locale/lang).
 

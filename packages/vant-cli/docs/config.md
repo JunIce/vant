@@ -5,6 +5,8 @@
     - [name](#name)
     - [build.css](#buildcss)
     - [build.site](#buildsite)
+    - [build.srcDir](#buildsrcdir)
+    - [build.namedExport](#buildnamedexport)
     - [site.title](#sitetitle)
     - [site.logo](#sitelogo)
     - [site.description](#sitedescription)
@@ -12,6 +14,8 @@
     - [site.versions](#siteversions)
     - [site.baiduAnalytics](#sitebaiduanalytics)
     - [site.searchConfig](#sitesearchconfig)
+    - [site.hideSimulator](#sitehidesimulator)
+    - [site.simulator.url](#sitesimulatorurl)
   - [Webpack](#webpack)
   - [Babel](#babel)
     - [默认配置](#-1)
@@ -123,6 +127,17 @@ module.exports = {
 };
 ```
 
+### build.namedExport
+
+- Type: `boolean`
+- Default: `false`
+
+是否通过 Named Export 对组件进行导出。
+
+未开启此选项时，会通过 `export default from 'xxx'` 导出组件内部的默认模块。
+
+开启此选项后，会通过 `export * from 'xxx'` 导出组件内部的所有模块、类型定义。
+
 ### site.title
 
 - Type: `string`
@@ -165,6 +180,8 @@ module.exports = {
             path: 'home',
             // 导航项文案
             title: '介绍',
+            // 是否隐藏当前页右侧的手机模拟器（默认不隐藏）
+            hideSimulator: true,
           },
         ],
       },
@@ -185,8 +202,8 @@ module.exports = {
   site: {
     versions: [
       {
-        label: '1.x',
-        link: 'https://youzan.github.io/vant/1.x/',
+        label: 'v1',
+        link: 'https://youzan.github.io/vant/v1/',
       },
     ],
   },
@@ -222,6 +239,27 @@ module.exports = {
 
 配置内容参见 [docsearch](https://docsearch.algolia.com/docs/behavior)。
 
+### site.hideSimulator
+
+- Type: `boolean`
+- Default: `false`
+
+是否隐藏所有页面右侧的手机模拟器，默认不隐藏
+
+### site.simulator.url
+
+- Type: `string`
+- Default: -
+
+自定义手机模拟器的 iframe URL 地址。
+
+### site.htmlPluginOptions
+
+- Type: `object`
+- Default: `undefined`
+
+html-webpack-plugin 的配置项，详见 [Options](https://github.com/jantimon/html-webpack-plugin#options)。
+
 ## Webpack
 
 通过根目录下的`webpack.config.js`文件可以修改 Webpack 配置，配置内容会通过 [webpack-merge](https://github.com/survivejs/webpack-merge) 合并到最终的配置中。
@@ -254,33 +292,10 @@ module.exports = {
 
 - @babel/preset-env（不含 core-js）
 - @babel/preset-typescript
-- @babel/plugin-transform-runtime
 - @babel/plugin-transform-object-assign
 - @babel/plugin-proposal-optional-chaining
 - @babel/plugin-proposal-nullish-coalescing-operator
 - @vue/babel-preset-jsx
-
-### 依赖
-
-由于使用了`@babel/plugin-transform-runtime`来优化 Babel 的 helper 函数，你需要将`@babel/runtime`添加到`package.json`的依赖项：
-
-```json
-{
-  "dependencies": {
-    "@babel/runtime": "7.x"
-  }
-}
-```
-
-如果使用了 JSX 的语法，还需要将`@vue/babel-helper-vue-jsx-merge-props`添加到依赖中：
-
-```json
-{
-  "dependencies": {
-    "@vue/babel-helper-vue-jsx-merge-props": "^1.0.0"
-  }
-}
-```
 
 ## Postcss
 

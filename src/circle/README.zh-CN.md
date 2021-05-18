@@ -1,35 +1,48 @@
 # Circle 环形进度条
 
+### 介绍
+
+圆环形的进度条组件，支持进度渐变动画。
+
 ### 引入
 
+通过以下方式来全局注册组件，更多注册方式请参考[组件注册](#/zh-CN/advanced-usage#zu-jian-zhu-ce)。
+
 ```js
-import Vue from 'vue';
+import { createApp } from 'vue';
 import { Circle } from 'vant';
 
-Vue.use(Circle);
+const app = createApp();
+app.use(Circle);
 ```
 
 ## 代码演示
 
 ### 基础用法
 
-`rate` 属性表示进度条的目标进度，`v-model` 表示动画过程中的实时进度。当 `rate` 发生变化时，`v-model` 会以 `speed` 的速度变化，直至达到 `rate` 设定的值。
+`rate` 属性表示进度条的目标进度，`v-model:current-rate` 表示动画过程中的实时进度。当 `rate` 发生变化时，`v-model:current-rate` 会以 `speed` 的速度变化，直至达到 `rate` 设定的值。
 
 ```html
-<van-circle v-model="currentRate" :rate="30" :speed="100" :text="text" />
+<van-circle
+  v-model:current-rate="currentRate"
+  :rate="30"
+  :speed="100"
+  :text="text"
+/>
 ```
 
 ```js
+import { ref, computed } from 'vue';
+
 export default {
-  data() {
+  setup() {
+    const currentRate = ref(0);
+    const text = computed(() => currentRate.value.toFixed(0) + '%');
+
     return {
-      currentRate: 0,
+      text,
+      currentRate,
     };
-  },
-  computed: {
-    text() {
-      return this.currentRate.toFixed(0) + '%';
-    },
   },
 };
 ```
@@ -40,7 +53,7 @@ export default {
 
 ```html
 <van-circle
-  v-model="currentRate"
+  v-model:current-rate="currentRate"
   :rate="rate"
   :stroke-width="60"
   text="宽度定制"
@@ -53,7 +66,7 @@ export default {
 
 ```html
 <van-circle
-  v-model="currentRate"
+  v-model:current-rate="currentRate"
   :rate="rate"
   layer-color="#ebedf0"
   text="颜色定制"
@@ -66,7 +79,7 @@ export default {
 
 ```html
 <van-circle
-  v-model="currentRate"
+  v-model:current-rate="currentRate"
   :rate="rate"
   :color="gradientColor"
   text="渐变色"
@@ -74,14 +87,19 @@ export default {
 ```
 
 ```js
+import { ref } from 'vue';
+
 export default {
-  data() {
+  setup() {
+    const currentRate = ref(0);
+    const gradientColor = {
+      '0%': '#3fecff',
+      '100%': '#6149f6',
+    };
+
     return {
-      currentRate: 0,
-      gradientColor: {
-        '0%': '#3fecff',
-        '100%': '#6149f6',
-      },
+      currentRate,
+      gradientColor,
     };
   },
 };
@@ -93,7 +111,7 @@ export default {
 
 ```html
 <van-circle
-  v-model="currentRate"
+  v-model:current-rate="currentRate"
   :rate="rate"
   :clockwise="false"
   text="逆时针方向"
@@ -105,7 +123,12 @@ export default {
 通过 `size` 属性设置圆环直径。
 
 ```html
-<van-circle v-model="currentRate" :rate="rate" size="120px" text="大小定制" />
+<van-circle
+  v-model:current-rate="currentRate"
+  :rate="rate"
+  size="120px"
+  text="大小定制"
+/>
 ```
 
 ## API
@@ -114,7 +137,7 @@ export default {
 
 | 参数 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| v-model | 当前进度 | _number_ | - |
+| v-model:current-rate | 当前进度 | _number_ | - |
 | rate | 目标进度 | _number \| string_ | `100` |
 | size | 圆环直径，默认单位为 `px` | _number \| string_ | `100px` |
 | color | 进度条颜色，传入对象格式可以定义渐变色 | _string \| object_ | `#1989fa` |
@@ -123,7 +146,7 @@ export default {
 | speed | 动画速度（单位为 rate/s） | _number \| string_ | `0` |
 | text | 文字 | _string_ | - |
 | stroke-width | 进度条宽度 | _number \| string_ | `40` |
-| stroke-linecap | 进度条端点的形状，可选值为`sqaure` `butt` | _string_ | `round` |
+| stroke-linecap | 进度条端点的形状，可选值为 `sqaure` `butt` | _string_ | `round` |
 | clockwise | 是否顺时针增加 | _boolean_ | `true` |
 
 ### Slots
@@ -131,3 +154,17 @@ export default {
 | 名称    | 说明           |
 | ------- | -------------- |
 | default | 自定义文字内容 |
+
+### 样式变量
+
+组件提供了下列 Less 变量，可用于自定义样式，使用方法请参考[主题定制](#/zh-CN/theme)。
+
+| 名称                     | 默认值              | 描述 |
+| ------------------------ | ------------------- | ---- |
+| @circle-size             | `100px`             | -    |
+| @circle-color            | `@blue`             | -    |
+| @circle-layer-color      | `@white`            | -    |
+| @circle-text-color       | `@text-color`       | -    |
+| @circle-text-font-weight | `@font-weight-bold` | -    |
+| @circle-text-font-size   | `@font-size-md`     | -    |
+| @circle-text-line-height | `@line-height-md`   | -    |

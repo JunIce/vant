@@ -1,5 +1,38 @@
 ## Changelog
 
+## 1.6.0
+
+- migrate all icons to iconfont.cn
+
+## 1.5.3
+
+- add config type definition
+
+## 1.5.2
+
+- update CDN URL
+
+## 1.5.1
+
+- add new wechat icon, rename old wechat icon to wechat-pay
+
+## 1.5.0
+
+- add sort icon
+- add font icon
+- add font-o icon
+- add revoke icon
+- add delete-o icon
+
+## 1.4.0
+
+- add encode-woff2.less
+
+## 1.3.2
+
+- fix incomplete after-sale icon
+- fix incomplete cash-back-record icon
+
 ## 1.3.1
 
 - add minus icon

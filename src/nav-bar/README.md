@@ -1,12 +1,19 @@
 # NavBar
 
+### Intro
+
+Provide navigation function for the page, often used at the top of the page.
+
 ### Install
 
+Register component globally via `app.use`, refer to [Component Registration](#/en-US/advanced-usage#zu-jian-zhu-ce) for more registration ways.
+
 ```js
-import Vue from 'vue';
+import { createApp } from 'vue';
 import { NavBar } from 'vant';
 
-Vue.use(NavBar);
+const app = createApp();
+app.use(NavBar);
 ```
 
 ## Usage
@@ -28,13 +35,13 @@ Vue.use(NavBar);
 import { Toast } from 'vant';
 
 export default {
-  methods: {
-    onClickLeft() {
-      Toast('Back');
-    },
-    onClickRight() {
-      Toast('Button');
-    },
+  setup() {
+    const onClickLeft = () => Toast('Back');
+    const onClickRight = () => Toast('Button');
+    return {
+      onClickLeft,
+      onClickRight,
+    };
   },
 };
 ```
@@ -61,8 +68,9 @@ export default {
 | left-arrow | Whether to show left arrow | _boolean_ | `false` |
 | border | Whether to show bottom border | _boolean_ | `true` |
 | fixed | Whether to fixed top | _boolean_ | `false` |
-| placeholder `v2.5.9` | Whether to generage a placeholder element when fixed | _boolean_ | `false` |
+| placeholder | Whether to generage a placeholder element when fixed | _boolean_ | `false` |
 | z-index | Z-index | _number \| string_ | `1` |
+| safe-area-inset-top | Whether to enable top safe area adaptation | _boolean_ | `false` |
 
 ### Slots
 
@@ -74,7 +82,22 @@ export default {
 
 ### Events
 
-| Event       | Description                       | Arguments |
-| ----------- | --------------------------------- | --------- |
-| click-left  | Triggered when click left button  | -         |
-| click-right | Triggered when click right button | -         |
+| Event       | Description                              | Arguments           |
+| ----------- | ---------------------------------------- | ------------------- |
+| click-left  | Emitted when the left button is clicked  | _event: MouseEvent_ |
+| click-right | Emitted when the right button is clicked | _event: MouseEvent_ |
+
+### Less Variables
+
+How to use: [Custom Theme](#/en-US/theme).
+
+| Name                      | Default Value   | Description |
+| ------------------------- | --------------- | ----------- |
+| @nav-bar-height           | `46px`          | -           |
+| @nav-bar-background-color | `@white`        | -           |
+| @nav-bar-arrow-size       | `16px`          | -           |
+| @nav-bar-icon-color       | `@blue`         | -           |
+| @nav-bar-text-color       | `@blue`         | -           |
+| @nav-bar-title-font-size  | `@font-size-lg` | -           |
+| @nav-bar-title-text-color | `@text-color`   | -           |
+| @nav-bar-z-index          | `1`             | -           |

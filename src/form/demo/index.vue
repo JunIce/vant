@@ -1,15 +1,13 @@
 <template>
-  <demo-section>
-    <basic-usage />
-    <validate-rules />
-    <field-type />
-  </demo-section>
+  <basic-usage />
+  <validate-rules />
+  <field-type />
 </template>
 
-<script>
-import BasicUsage from './BasicUsage';
-import ValidateRules from './ValidateRules';
-import FieldType from './FieldType';
+<script lang="ts">
+import BasicUsage from './BasicUsage.vue';
+import ValidateRules from './ValidateRules.vue';
+import FieldType from './FieldType.vue';
 
 export default {
   components: {

@@ -64,8 +64,8 @@
       <field-type-area />
       <field-type-calendar />
 
-      <div style="margin: 16px 16px 0;">
-        <van-button round block type="info" native-type="submit">
+      <div style="margin: 16px 16px 0">
+        <van-button round block type="primary" native-type="submit">
           {{ t('submit') }}
         </van-button>
       </div>
@@ -73,44 +73,46 @@
   </demo-block>
 </template>
 
-<script>
-import FieldTypeArea from './FieldTypeArea';
-import FieldTypePicker from './FieldTypePicker';
-import FieldTypeCalendar from './FieldTypeCalendar';
-import FieldTypeDatetimePicker from './FieldTypeDatetimePicker';
+<script lang="ts">
+import { reactive, toRefs } from 'vue';
+import { useTranslate } from '@demo/use-translate';
+import FieldTypeArea from './FieldTypeArea.vue';
+import FieldTypePicker from './FieldTypePicker.vue';
+import FieldTypeCalendar from './FieldTypeCalendar.vue';
+import FieldTypeDatetimePicker from './FieldTypeDatetimePicker.vue';
+
+const i18n = {
+  'zh-CN': {
+    rate: '评分',
+    radio: '单选框',
+    submit: '提交',
+    switch: '开关',
+    slider: '滑块',
+    picker: '选择器',
+    stepper: '步进器',
+    checkbox: '复选框',
+    uploader: '文件上传',
+    fieldType: '表单项类型',
+    checkboxGroup: '复选框组',
+    requireCheckbox: '请勾选复选框',
+  },
+  'en-US': {
+    rate: 'Rate',
+    radio: 'Radio',
+    submit: 'Submit',
+    switch: 'Switch',
+    slider: 'Slider',
+    picker: 'Picker',
+    stepper: 'Stepper',
+    checkbox: 'Checkbox',
+    uploader: 'Uploader',
+    fieldType: 'Field Type',
+    checkboxGroup: 'Checkbox Group',
+    requireCheckbox: 'Checkbox is required',
+  },
+};
 
 export default {
-  i18n: {
-    'zh-CN': {
-      rate: '评分',
-      radio: '单选框',
-      submit: '提交',
-      switch: '开关',
-      slider: '滑块',
-      picker: '选择器',
-      stepper: '步进器',
-      checkbox: '复选框',
-      uploader: '文件上传',
-      fieldType: '表单项类型',
-      checkboxGroup: '复选框组',
-      requireCheckbox: '请勾选复选框',
-    },
-    'en-US': {
-      rate: 'Rate',
-      radio: 'Radio',
-      submit: 'Submit',
-      switch: 'Switch',
-      slider: 'Slider',
-      picker: 'Picker',
-      stepper: 'Stepper',
-      checkbox: 'Checkbox',
-      uploader: 'Uploader',
-      fieldType: 'Field Type',
-      checkboxGroup: 'Checkbox Group',
-      requireCheckbox: 'Checkbox is required',
-    },
-  },
-
   components: {
     FieldTypeArea,
     FieldTypePicker,
@@ -118,8 +120,9 @@ export default {
     FieldTypeDatetimePicker,
   },
 
-  data() {
-    return {
+  setup() {
+    const t = useTranslate(i18n);
+    const state = reactive({
       rate: 3,
       radio: '1',
       slider: 50,
@@ -128,13 +131,17 @@ export default {
       checkbox: false,
       checkboxGroup: [],
       switchChecked: false,
-    };
-  },
+    });
 
-  methods: {
-    onSubmit(values) {
+    const onSubmit = (values: Record<string, string>) => {
       console.log(values);
-    },
+    };
+
+    return {
+      ...toRefs(state),
+      t,
+      onSubmit,
+    };
   },
 };
 </script>

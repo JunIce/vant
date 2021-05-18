@@ -1,14 +1,11 @@
-import Vue from 'vue';
-import { mount, TransitionStub } from '@vue/test-utils';
+import './plugin';
+import Locale from '../src/locale';
+import enUS from '../src/locale/lang/en-US';
 
-// prevent vue warning log
-Vue.config.silent = true;
-
-// stub transition
-Vue.component('transition', TransitionStub as any);
+Locale.use('en-US', enUS);
 
 // promisify setTimeout
-export function later(delay: number = 0): Promise<void> {
+export function later(delay = 0): Promise<void> {
   return new Promise((resolve) => {
     setTimeout(resolve, delay);
   });
@@ -16,4 +13,4 @@ export function later(delay: number = 0): Promise<void> {
 
 export * from './dom';
 export * from './event';
-export { mount };
+export { mount } from '@vue/test-utils';

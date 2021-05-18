@@ -1,4 +1,4 @@
-@import '../style/var';
+@import './var.less';
 
 .van-list {
   &__loading,
@@ -13,5 +13,12 @@
   &__placeholder {
     height: 0;
     pointer-events: none;
+  }
+
+  &__loading-icon {
+    .van-loading__spinner {
+      width: @list-loading-icon-size;
+      height: @list-loading-icon-size;
+    }
   }
 }

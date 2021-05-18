@@ -6,11 +6,14 @@
 
 ### 引入
 
+通过以下方式来全局注册组件，更多注册方式请参考[组件注册](#/zh-CN/advanced-usage#zu-jian-zhu-ce)。
+
 ```js
-import Vue from 'vue';
+import { createApp } from 'vue';
 import { Stepper } from 'vant';
 
-Vue.use(Stepper);
+const app = createApp();
+app.use(Stepper);
 ```
 
 ## 代码演示
@@ -24,11 +27,12 @@ Vue.use(Stepper);
 ```
 
 ```js
+import { ref } from 'vue';
+
 export default {
-  data() {
-    return {
-      value: 1,
-    };
+  setup() {
+    const value = ref(1);
+    return { value };
   },
 };
 ```
@@ -91,32 +95,36 @@ export default {
 
 ### 异步变更
 
-如果需要异步地修改输入框的值，可以设置 `async-change` 属性，并在 `change` 事件中手动修改 `value`。
+通过 `before-change` 属性可以在
 
 ```html
-<van-stepper :value="value" async-change @change="onChange" />
+<van-stepper v-model="value" :before-change="beforeChange" />
 ```
 
 ```js
+import { ref } from 'vue';
 import { Toast } from 'vant';
 
 export default {
-  data() {
-    return {
-      value: 1,
-    };
-  },
-  methods: {
-    onChange(value) {
+  setup() {
+    const value = ref(1);
+
+    const beforeChange = (value) => {
       Toast.loading({ forbidClick: true });
 
-      setTimeout(() => {
-        Toast.clear();
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          Toast.clear();
+          // 在 resolve 函数中返回 true 或 false
+          resolve(true);
+        }, 500);
+      });
+    };
 
-        // 注意此时修改 value 后会再次触发 change 事件
-        this.value = value;
-      }, 500);
-    },
+    return {
+      value,
+      beforeChange,
+    };
   },
 };
 ```
@@ -140,22 +148,23 @@ export default {
 | max | 最大值 | _number \| string_ | - |
 | default-value | 初始值，当 v-model 为空时生效 | _number \| string_ | `1` |
 | step | 步长，每次点击时改变的值 | _number \| string_ | `1` |
-| name | 标识符，可以在`change`事件回调参数中获取 | _number \| string_ | - |
-| input-width | 输入框宽度，默认单位为`px` | _number \| string_ | `32px` |
-| button-size | 按钮大小以及输入框高度，默认单位为`px` | _number \| string_ | `28px` |
+| name | 标识符，可以在 `change` 事件回调参数中获取 | _number \| string_ | - |
+| input-width | 输入框宽度，默认单位为 `px` | _number \| string_ | `32px` |
+| button-size | 按钮大小以及输入框高度，默认单位为 `px` | _number \| string_ | `28px` |
 | decimal-length | 固定显示的小数位数 | _number \| string_ | - |
-| theme `v2.8.2` | 样式风格，可选值为 `round` | _string_ | - |
-| placeholder `v2.8.6` | 输入框占位提示文字 | _string_ | - |
+| theme | 样式风格，可选值为 `round` | _string_ | - |
+| placeholder | 输入框占位提示文字 | _string_ | - |
 | integer | 是否只允许输入整数 | _boolean_ | `false` |
 | disabled | 是否禁用步进器 | _boolean_ | `false` |
 | disable-plus | 是否禁用增加按钮 | _boolean_ | `false` |
 | disable-minus | 是否禁用减少按钮 | _boolean_ | `false` |
 | disable-input | 是否禁用输入框 | _boolean_ | `false` |
-| async-change | 是否开启异步变更，开启后需要手动控制输入值 | _boolean_ | `false` |
+| before-change | 输入值变化前的回调函数，返回 `false` 可阻止输入，支持返回 Promise | _(value) => boolean \| Promise_ | `false` |
 | show-plus | 是否显示增加按钮 | _boolean_ | `true` |
 | show-minus | 是否显示减少按钮 | _boolean_ | `true` |
-| long-press `v2.4.3` | 是否开启长按手势 | _boolean_ | `true` |
-| allow-empty `v2.9.1` | 是否允许输入的值为空 | _boolean_ | `false` |
+| show-input | 是否显示输入框 | _boolean_ | `true` |
+| long-press | 是否开启长按手势 | _boolean_ | `true` |
+| allow-empty | 是否允许输入的值为空 | _boolean_ | `false` |
 
 ### Events
 
@@ -167,6 +176,27 @@ export default {
 | minus | 点击减少按钮时触发 | - |
 | focus | 输入框聚焦时触发 | _event: Event_ |
 | blur | 输入框失焦时触发 | _event: Event_ |
+
+### 样式变量
+
+组件提供了下列 Less 变量，可用于自定义样式，使用方法请参考[主题定制](#/zh-CN/theme)。
+
+| 名称                                     | 默认值              | 描述 |
+| ---------------------------------------- | ------------------- | ---- |
+| @stepper-active-color                    | `#e8e8e8`           | -    |
+| @stepper-background-color                | `@active-color`     | -    |
+| @stepper-button-icon-color               | `@text-color`       | -    |
+| @stepper-button-disabled-color           | `@background-color` | -    |
+| @stepper-button-disabled-icon-color      | `@gray-5`           | -    |
+| @stepper-button-round-theme-color        | `@red`              | -    |
+| @stepper-input-width                     | `32px`              | -    |
+| @stepper-input-height                    | `28px`              | -    |
+| @stepper-input-font-size                 | `@font-size-md`     | -    |
+| @stepper-input-line-height               | `normal`            | -    |
+| @stepper-input-text-color                | `@text-color`       | -    |
+| @stepper-input-disabled-text-color       | `@gray-5`           | -    |
+| @stepper-input-disabled-background-color | `@active-color`     | -    |
+| @stepper-border-radius                   | `@border-radius-md` | -    |
 
 ## 常见问题
 

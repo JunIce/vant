@@ -1,13 +1,20 @@
 # Cell 单元格
 
+### 介绍
+
+单元格为列表中的单个展示项。
+
 ### 引入
 
+通过以下方式来全局注册组件，更多注册方式请参考[组件注册](#/zh-CN/advanced-usage#zu-jian-zhu-ce)。
+
 ```js
-import Vue from 'vue';
+import { createApp } from 'vue';
 import { Cell, CellGroup } from 'vant';
 
-Vue.use(Cell);
-Vue.use(CellGroup);
+const app = createApp();
+app.use(Cell);
+app.use(CellGroup);
 ```
 
 ## 代码演示
@@ -139,26 +146,26 @@ Vue.use(CellGroup);
 | label | 标题下方的描述信息 | _string_ | - |
 | size | 单元格大小，可选值为 `large` | _string_ | - |
 | icon | 左侧[图标名称](#/zh-CN/icon)或图片链接 | _string_ | - |
-| icon-prefix `v2.5.3` | 图标类名前缀，同 Icon 组件的 [class-prefix 属性](#/zh-CN/icon#props) | _string_ | `van-icon` |
+| icon-prefix | 图标类名前缀，同 Icon 组件的 [class-prefix 属性](#/zh-CN/icon#props) | _string_ | `van-icon` |
 | url | 点击后跳转的链接地址 | _string_ | - |
 | to | 点击后跳转的目标路由对象，同 vue-router 的 [to 属性](https://router.vuejs.org/zh/api/#to) | _string \| object_ | - |
 | border | 是否显示内边框 | _boolean_ | `true` |
 | replace | 是否在跳转时替换当前页面历史 | _boolean_ | `false` |
-| clickable | 是否开启点击反馈 | _boolean_ | `false` |
+| clickable | 是否开启点击反馈 | _boolean_ | `null` |
 | is-link | 是否展示右侧箭头并开启点击反馈 | _boolean_ | `false` |
 | required | 是否显示表单必填星号 | _boolean_ | `false` |
 | center | 是否使内容垂直居中 | _boolean_ | `false` |
 | arrow-direction | 箭头方向，可选值为 `left` `up` `down` | _string_ | `right` |
-| title-style | 左侧标题额外样式 | _any_ | - |
-| title-class | 左侧标题额外类名 | _any_ | - |
-| value-class | 右侧内容额外类名 | _any_ | - |
-| label-class | 描述信息额外类名 | _any_ | - |
+| title-style | 左侧标题额外样式 | _string \| Array \| object_ | - |
+| title-class | 左侧标题额外类名 | _string \| Array \| object_ | - |
+| value-class | 右侧内容额外类名 | _string \| Array \| object_ | - |
+| label-class | 描述信息额外类名 | _string \| Array \| object_ | - |
 
 ### Cell Events
 
-| 事件名 | 说明             | 回调参数       |
-| ------ | ---------------- | -------------- |
-| click  | 点击单元格时触发 | _event: Event_ |
+| 事件名 | 说明             | 回调参数            |
+| ------ | ---------------- | ------------------- |
+| click  | 点击单元格时触发 | _event: MouseEvent_ |
 
 ### CellGroup Slots
 
@@ -177,3 +184,34 @@ Vue.use(CellGroup);
 | icon       | 自定义左侧图标                |
 | right-icon | 自定义右侧按钮，默认为`arrow` |
 | extra      | 自定义单元格最右侧的额外内容  |
+
+### 样式变量
+
+组件提供了下列 Less 变量，可用于自定义样式，使用方法请参考[主题定制](#/zh-CN/theme)。
+
+| 名称                          | 默认值                                | 描述 |
+| ----------------------------- | ------------------------------------- | ---- |
+| @cell-font-size               | `@font-size-md`                       | -    |
+| @cell-line-height             | `24px`                                | -    |
+| @cell-vertical-padding        | `10px`                                | -    |
+| @cell-horizontal-padding      | `@padding-md`                         | -    |
+| @cell-text-color              | `@text-color`                         | -    |
+| @cell-background-color        | `@white`                              | -    |
+| @cell-border-color            | `@border-color`                       | -    |
+| @cell-active-color            | `@active-color`                       | -    |
+| @cell-required-color          | `@red`                                | -    |
+| @cell-label-color             | `@gray-6`                             | -    |
+| @cell-label-font-size         | `@font-size-sm`                       | -    |
+| @cell-label-line-height       | `@line-height-sm`                     | -    |
+| @cell-label-margin-top        | `@padding-base`                       | -    |
+| @cell-value-color             | `@gray-6`                             | -    |
+| @cell-icon-size               | `16px`                                | -    |
+| @cell-right-icon-color        | `@gray-6`                             | -    |
+| @cell-large-vertical-padding  | `@padding-sm`                         | -    |
+| @cell-large-title-font-size   | `@font-size-lg`                       | -    |
+| @cell-large-label-font-size   | `@font-size-md`                       | -    |
+| @cell-group-background-color  | `@white`                              | -    |
+| @cell-group-title-color       | `@gray-6`                             | -    |
+| @cell-group-title-padding     | `@padding-md @padding-md @padding-xs` | -    |
+| @cell-group-title-font-size   | `@font-size-md`                       | -    |
+| @cell-group-title-line-height | `16px`                                | -    |

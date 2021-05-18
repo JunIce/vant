@@ -1,12 +1,19 @@
 # Divider
 
+### Intro
+
+Separate content into multiple areas.
+
 ### Install
 
+Register component globally via `app.use`, refer to [Component Registration](#/en-US/advanced-usage#zu-jian-zhu-ce) for more registration ways.
+
 ```js
-import Vue from 'vue';
+import { createApp } from 'vue';
 import { Divider } from 'vant';
 
-Vue.use(Divider);
+const app = createApp();
+app.use(Divider);
 ```
 
 ## Usage
@@ -61,3 +68,18 @@ Vue.use(Divider);
 | Name    | Description |
 | ------- | ----------- |
 | default | content     |
+
+### Less Variables
+
+How to use: [Custom Theme](#/en-US/theme).
+
+| Name                         | Default Value   | Description |
+| ---------------------------- | --------------- | ----------- |
+| @divider-margin              | `@padding-md 0` | -           |
+| @divider-text-color          | `@gray-6`       | -           |
+| @divider-font-size           | `@font-size-md` | -           |
+| @divider-line-height         | `24px`          | -           |
+| @divider-border-color        | `@border-color` | -           |
+| @divider-content-padding     | `@padding-md`   | -           |
+| @divider-content-left-width  | `10%`           | -           |
+| @divider-content-right-width | `10%`           | -           |

@@ -6,12 +6,15 @@
 
 ### 引入
 
+通过以下方式来全局注册组件，更多注册方式请参考[组件注册](#/zh-CN/advanced-usage#zu-jian-zhu-ce)。
+
 ```js
-import Vue from 'vue';
+import { createApp } from 'vue';
 import { DropdownMenu, DropdownItem } from 'vant';
 
-Vue.use(DropdownMenu);
-Vue.use(DropdownItem);
+const app = createApp();
+app.use(DropdownMenu);
+app.use(DropdownItem);
 ```
 
 ## 代码演示
@@ -20,27 +23,35 @@ Vue.use(DropdownItem);
 
 ```html
 <van-dropdown-menu>
-  <van-dropdown-item v-model="value1" :options="option1" />
-  <van-dropdown-item v-model="value2" :options="option2" />
+  <van-dropdown-item v-model="state.value1" :options="option1" />
+  <van-dropdown-item v-model="state.value2" :options="option2" />
 </van-dropdown-menu>
 ```
 
 ```js
+import { reactive } from 'vue';
+
 export default {
-  data() {
-    return {
+  setup() {
+    const state = reactive({
       value1: 0,
       value2: 'a',
-      option1: [
-        { text: '全部商品', value: 0 },
-        { text: '新款商品', value: 1 },
-        { text: '活动商品', value: 2 },
-      ],
-      option2: [
-        { text: '默认排序', value: 'a' },
-        { text: '好评排序', value: 'b' },
-        { text: '销量排序', value: 'c' },
-      ],
+    });
+    const option1 = [
+      { text: '全部商品', value: 0 },
+      { text: '新款商品', value: 1 },
+      { text: '活动商品', value: 2 },
+    ];
+    const option2 = [
+      { text: '默认排序', value: 'a' },
+      { text: '好评排序', value: 'b' },
+      { text: '销量排序', value: 'c' },
+    ];
+
+    return {
+      state,
+      option1,
+      option2,
     };
   },
 };
@@ -74,23 +85,31 @@ export default {
 ```
 
 ```js
+import { ref, reactive } from 'vue';
+
 export default {
-  data() {
-    return {
+  setup() {
+    const item = ref(null);
+    const state = reactive({
       value: 0,
       switch1: false,
       switch2: false,
-      option: [
-        { text: '全部商品', value: 0 },
-        { text: '新款商品', value: 1 },
-        { text: '活动商品', value: 2 },
-      ],
+    });
+    const options = [
+      { text: '全部商品', value: 0 },
+      { text: '新款商品', value: 1 },
+      { text: '活动商品', value: 2 },
+    ];
+    const onConfirm = () => {
+      item.value.toggle();
     };
-  },
-  methods: {
-    onConfirm() {
-      this.$refs.item.toggle();
-    },
+
+    return {
+      item,
+      state,
+      options,
+      onConfirm,
+    };
   },
 };
 ```
@@ -144,13 +163,13 @@ export default {
 
 | 参数 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| value | 当前选中项对应的 value，可以通过`v-model`双向绑定 | _number \| string_ | - |
+| v-model | 当前选中项对应的 value | _number \| string_ | - |
 | title | 菜单项标题 | _string_ | 当前选中项文字 |
 | options | 选项数组 | _Option[]_ | `[]` |
 | disabled | 是否禁用菜单 | _boolean_ | `false` |
-| lazy-render `v2.8.5` | 是否在首次展开时才渲染菜单内容 | _boolean_ | `true` |
-| title-class | 标题额外类名 | _string_ | - |
-| get-container | 指定挂载的节点，[用法示例](#/zh-CN/popup#zhi-ding-gua-zai-wei-zhi) | _string \| () => Element_ | - |
+| lazy-render | 是否在首次展开时才渲染菜单内容 | _boolean_ | `true` |
+| title-class | 标题额外类名 | _string \| Array \| object_ | - |
+| teleport | 指定挂载的节点，[用法示例](#/zh-CN/popup#zhi-ding-gua-zai-wei-zhi) | _string \| Element_ | - |
 
 ### DropdownItem Events
 
@@ -164,14 +183,14 @@ export default {
 
 ### DropdownItem Slots
 
-| 名称    | 说明                       |
-| ------- | -------------------------- |
-| default | 菜单内容                   |
-| title   | 自定义标题，不支持动态渲染 |
+| 名称    | 说明             |
+| ------- | ---------------- |
+| default | 菜单内容         |
+| title   | 自定义菜单项标题 |
 
 ### DropdownItem 方法
 
-通过 ref 可以获取到 DropdownItem 实例并调用实例方法，详见[组件实例方法](#/zh-CN/quickstart#zu-jian-shi-li-fang-fa)。
+通过 ref 可以获取到 DropdownItem 实例并调用实例方法，详见[组件实例方法](#/zh-CN/advanced-usage#zu-jian-shi-li-fang-fa)。
 
 | 方法名 | 说明 | 参数 | 返回值 |
 | --- | --- | --- | --- |
@@ -184,3 +203,37 @@ export default {
 | text  | 文字                                   | _string_           |
 | value | 标识符                                 | _number \| string_ |
 | icon  | 左侧[图标名称](#/zh-CN/icon)或图片链接 | _string_           |
+
+### 样式变量
+
+组件提供了下列 Less 变量，可用于自定义样式，使用方法请参考[主题定制](#/zh-CN/theme)。
+
+| 名称 | 默认值 | 描述 |
+| --- | --- | --- |
+| @dropdown-menu-height | `48px` | - |
+| @dropdown-menu-background-color | `@white` | - |
+| @dropdown-menu-box-shadow | `0 2px 12px fade(@gray-7, 12)` | - |
+| @dropdown-menu-title-font-size | `15px` | - |
+| @dropdown-menu-title-text-color | `@text-color` | - |
+| @dropdown-menu-title-active-text-color | `@red` | - |
+| @dropdown-menu-title-disabled-text-color | `@gray-6` | - |
+| @dropdown-menu-title-padding | `0 @padding-xs` | - |
+| @dropdown-menu-title-line-height | `@line-height-lg` | - |
+| @dropdown-menu-option-active-color | `@red` | - |
+| @dropdown-menu-content-max-height | `80%` | - |
+| @dropdown-item-z-index | `10` | - |
+
+## 常见问题
+
+### 父元素设置 transform 后，下拉菜单的位置错误？
+
+把 `DropdownMenu` 嵌套在 `Tabs` 等组件内部使用时，可能会遇到下拉菜单位置错误的问题。这是因为在 Chrome 浏览器中，transform 元素内部的 fixed 布局会降级成 absolute 布局，导致下拉菜单的布局异常。
+
+将 `DropdownItem` 的 `teleport` 属性设置为 `body` 即可避免此问题：
+
+```html
+<van-dropdown-menu>
+  <van-dropdown-item teleport="body" />
+  <van-dropdown-item teleport="body" />
+</van-dropdown-menu>
+```

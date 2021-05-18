@@ -6,11 +6,14 @@
 
 ### 引入
 
+通过以下方式来全局注册组件，更多注册方式请参考[组件注册](#/zh-CN/advanced-usage#zu-jian-zhu-ce)。
+
 ```js
-import Vue from 'vue';
+import { createApp } from 'vue';
 import { NumberKeyboard } from 'vant';
 
-Vue.use(NumberKeyboard);
+const app = createApp();
+app.use(NumberKeyboard);
 ```
 
 ## 代码演示
@@ -20,9 +23,7 @@ Vue.use(NumberKeyboard);
 数字键盘提供了 `input`、`delete`、`blur` 事件，分别对应输入内容、删除内容和失去焦点的动作。
 
 ```html
-<van-cell @touchstart.native.stop="show = true">
-  弹出默认键盘
-</van-cell>
+<van-cell @touchstart.stop="show = true">弹出默认键盘</van-cell>
 <van-number-keyboard
   :show="show"
   @blur="show = false"
@@ -32,21 +33,20 @@ Vue.use(NumberKeyboard);
 ```
 
 ```js
+import { ref } from 'vue';
 import { Toast } from 'vant';
 
 export default {
-  data() {
+  setup() {
+    const show = ref(true);
+    const onInput = (value) => Toast(value);
+    const onDelete = () => Toast('删除');
+
     return {
-      show: true,
+      show,
+      onInput,
+      onDelete,
     };
-  },
-  methods: {
-    onInput(value) {
-      Toast(value);
-    },
-    onDelete() {
-      Toast('删除');
-    },
   },
 };
 ```
@@ -74,7 +74,7 @@ export default {
 通过 `extra-key` 属性可以设置左下角按键内容，比如需要输入身份证号时，可以将 `extra-key` 设置为 `X`。
 
 ```html
-<van-cell plain type="primary" @touchstart.native.stop="show = true">
+<van-cell plain type="primary" @touchstart.stop="show = true">
   弹出身份证号键盘
 </van-cell>
 <van-number-keyboard
@@ -92,7 +92,7 @@ export default {
 通过 `title` 属性可以设置键盘标题。
 
 ```html
-<van-cell plain type="info" @touchstart.native.stop="show = true">
+<van-cell plain type="primary" @touchstart.stop="show = true">
   弹出带标题的键盘
 </van-cell>
 <van-number-keyboard
@@ -111,7 +111,7 @@ export default {
 当 theme 为 `custom` 时，支持以数组的形式配置两个 `extra-key`。
 
 ```html
-<van-cell plain type="primary" @touchstart.native.stop="show = true">
+<van-cell plain type="primary" @touchstart.stop="show = true">
   弹出配置多个按键的键盘
 </van-cell>
 <van-number-keyboard
@@ -124,17 +124,27 @@ export default {
 />
 ```
 
+### 随机数字键盘
+
+通过 `random-key-order` 属性可以随机排序数字键盘，常用于安全等级较高的场景。
+
+```html
+<van-cell @touchstart.stop="show = true"> 弹出配置随机数字的键盘 </van-cell>
+<van-number-keyboard
+  :show="show"
+  random-key-order
+  @blur="show = false"
+  @input="onInput"
+  @delete="onDelete"
+/>
+```
+
 ### 双向绑定
 
 可以通过 `v-model` 绑定键盘当前输入值。
 
 ```html
-<van-field
-  readonly
-  clickable
-  :value="value"
-  @touchstart.native.stop="show = true"
-/>
+<van-field v-model="value" readonly clickable @touchstart.stop="show = true" />
 <van-number-keyboard
   v-model="value"
   :show="show"
@@ -144,11 +154,15 @@ export default {
 ```
 
 ```js
+import { ref } from 'vue';
+
 export default {
-  data() {
+  setup() {
+    const show = ref(true);
+    const value = ref('');
     return {
-      show: false,
-      value: '',
+      show,
+      value,
     };
   },
 };
@@ -160,21 +174,23 @@ export default {
 
 | 参数 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| v-model (value) | 当前输入值 | _string_ | - |
+| v-model | 当前输入值 | _string_ | - |
 | show | 是否显示键盘 | _boolean_ | - |
 | title | 键盘标题 | _string_ | - |
 | theme | 样式风格，可选值为 `custom` | _string_ | `default` |
 | maxlength | 输入值最大长度 | _number \| string_ | - |
 | transition | 是否开启过场动画 | _boolean_ | `true` |
 | z-index | 键盘 z-index 层级 | _number \| string_ | `100` |
-| extra-key `v2.8.2` | 底部额外按键的内容 | _string \| string[]_ | `''` |
+| extra-key | 底部额外按键的内容 | _string \| string[]_ | `''` |
 | close-button-text | 关闭按钮文字，空则不展示 | _string_ | - |
 | delete-button-text | 删除按钮文字，空则展示删除图标 | _string_ | - |
-| close-button-loading `v2.7.0` | 是否将关闭按钮设置为加载中状态，仅在 `theme="custom"` 时有效 | _boolean_ | `false` |
-| show-delete-key `v2.5.9` | 是否展示删除图标 | _boolean_ | `true` |
-| hide-on-click-outside | 点击外部时是否收起键盘 | _boolean_ | `true` |
-| get-container `v2.10.0` | 指定挂载的节点，[用法示例](#/zh-CN/popup#zhi-ding-gua-zai-wei-zhi) | _string \| () => Element_ | - |
-| safe-area-inset-bottom | 是否开启[底部安全区适配](#/zh-CN/quickstart#di-bu-an-quan-qu-gua-pei) | _boolean_ | `true` |
+| close-button-loading | 是否将关闭按钮设置为加载中状态，仅在 `theme="custom"` 时有效 | _boolean_ | `false` |
+| show-delete-key | 是否展示删除图标 | _boolean_ | `true` |
+| blur-on-close `v3.0.6` | 是否在点击关闭按钮时触发 blur 事件 | _boolean_ | `true` |
+| hide-on-click-outside | 是否在点击外部时收起键盘 | _boolean_ | `true` |
+| teleport | 指定挂载的节点，[用法示例](#/zh-CN/popup#zhi-ding-gua-zai-wei-zhi) | _string \| Element_ | - |
+| safe-area-inset-bottom | 是否开启[底部安全区适配](#/zh-CN/advanced-usage#di-bu-an-quan-qu-gua-pei) | _boolean_ | `true` |
+| random-key-order | 是否将通过随机顺序展示按键 | _boolean_ | `false` |
 
 ### Events
 
@@ -195,8 +211,29 @@ export default {
 | extra-key  | 自定义左下角按键内容 |
 | title-left | 自定义标题栏左侧内容 |
 
+### 样式变量
+
+组件提供了下列 Less 变量，可用于自定义样式，使用方法请参考[主题定制](#/zh-CN/theme)。
+
+| 名称                                     | 默认值             | 描述 |
+| ---------------------------------------- | ------------------ | ---- |
+| @number-keyboard-background-color        | `@gray-2`          | -    |
+| @number-keyboard-key-height              | `48px`             | -    |
+| @number-keyboard-key-font-size           | `28px`             | -    |
+| @number-keyboard-key-active-color        | `@gray-3`          | -    |
+| @number-keyboard-delete-font-size        | `@font-size-lg`    | -    |
+| @number-keyboard-title-color             | `@gray-7`          | -    |
+| @number-keyboard-title-height            | `34px`             | -    |
+| @number-keyboard-title-font-size         | `@font-size-lg`    | -    |
+| @number-keyboard-close-padding           | `0 @padding-md`    | -    |
+| @number-keyboard-close-color             | `@text-link-color` | -    |
+| @number-keyboard-close-font-size         | `@font-size-md`    | -    |
+| @number-keyboard-button-text-color       | `@white`           | -    |
+| @number-keyboard-button-background-color | `@blue`            | -    |
+| @number-keyboard-z-index                 | `100`              | -    |
+
 ## 常见问题
 
 ### 在桌面端无法操作组件？
 
-参见[在桌面端使用](#/zh-CN/quickstart#zai-zhuo-mian-duan-shi-yong)。
+参见[桌面端适配](#/zh-CN/advanced-usage#zhuo-mian-duan-gua-pei)。

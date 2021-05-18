@@ -6,11 +6,14 @@
 
 ### 引入
 
+通过以下方式来全局注册组件，更多注册方式请参考[组件注册](#/zh-CN/advanced-usage#zu-jian-zhu-ce)。
+
 ```js
-import Vue from 'vue';
+import { createApp } from 'vue';
 import { DatetimePicker } from 'vant';
 
-Vue.use(DatetimePicker);
+const app = createApp();
+app.use(DatetimePicker);
 ```
 
 ## 代码演示
@@ -30,12 +33,15 @@ DatetimePicker 通过 type 属性来定义需要选择的时间类型，type 为
 ```
 
 ```js
+import { ref } from 'vue';
+
 export default {
-  data() {
+  setup() {
+    const currentDate = ref(new Date(2021, 0, 17));
     return {
       minDate: new Date(2020, 0, 1),
       maxDate: new Date(2025, 10, 1),
-      currentDate: new Date(),
+      currentDate,
     };
   },
 };
@@ -57,30 +63,35 @@ export default {
 ```
 
 ```js
+import { ref } from 'vue';
+
 export default {
-  data() {
-    return {
-      minDate: new Date(2020, 0, 1),
-      maxDate: new Date(2025, 10, 1),
-      currentDate: new Date(),
-    };
-  },
-  methods: {
-    formatter(type, val) {
+  setup() {
+    const currentDate = ref(new Date());
+
+    const formatter = (type, val) => {
       if (type === 'year') {
         return `${val}年`;
-      } else if (type === 'month') {
+      }
+      if (type === 'month') {
         return `${val}月`;
       }
       return val;
-    },
+    };
+
+    return {
+      minDate: new Date(2020, 0, 1),
+      maxDate: new Date(2025, 10, 1),
+      formatter,
+      currentDate,
+    };
   },
 };
 ```
 
 ### 选择月日
 
-将 type 设置为 `month-day` 即可选择月份和日期（从 2.8.4 版本开始支持）。
+将 type 设置为 `month-day` 即可选择月份和日期。
 
 ```html
 <van-datetime-picker
@@ -94,23 +105,28 @@ export default {
 ```
 
 ```js
+import { ref } from 'vue';
+
 export default {
-  data() {
-    return {
-      minDate: new Date(2020, 0, 1),
-      maxDate: new Date(2025, 10, 1),
-      currentDate: new Date(),
-    };
-  },
-  methods: {
-    formatter(type, val) {
+  setup() {
+    const currentDate = ref(new Date());
+
+    const formatter = (type, val) => {
       if (type === 'month') {
         return `${val}月`;
-      } else if (type === 'day') {
+      }
+      if (type === 'day') {
         return `${val}日`;
       }
       return val;
-    },
+    };
+
+    return {
+      minDate: new Date(2020, 0, 1),
+      maxDate: new Date(2025, 10, 1),
+      formatter,
+      currentDate,
+    };
   },
 };
 ```
@@ -130,11 +146,12 @@ export default {
 ```
 
 ```js
+import { ref } from 'vue';
+
 export default {
-  data() {
-    return {
-      currentTime: '12:00',
-    };
+  setup() {
+    const currentTime = ref('12:00');
+    return { currentTime };
   },
 };
 ```
@@ -154,12 +171,15 @@ export default {
 ```
 
 ```js
+import { ref } from 'vue';
+
 export default {
-  data() {
+  setup() {
+    const currentDate = ref(new Date());
     return {
       minDate: new Date(2020, 0, 1),
       maxDate: new Date(2025, 10, 1),
-      currentDate: new Date(),
+      currentDate,
     };
   },
 };
@@ -167,7 +187,7 @@ export default {
 
 ### 选择年月日小时
 
-将 type 设置为 `datehour` 即可选择日期和小时，包括年月日和小时（从 2.9.1 版本开始支持）。
+将 type 设置为 `datehour` 即可选择日期和小时，包括年月日和小时。
 
 ```html
 <van-datetime-picker
@@ -180,12 +200,15 @@ export default {
 ```
 
 ```js
+import { ref } from 'vue';
+
 export default {
-  data() {
+  setup() {
+    const currentDate = ref(new Date());
     return {
       minDate: new Date(2020, 0, 1),
       maxDate: new Date(2025, 10, 1),
-      currentDate: new Date(),
+      currentDate,
     };
   },
 };
@@ -200,19 +223,23 @@ export default {
 ```
 
 ```js
+import { ref } from 'vue';
+
 export default {
-  data() {
-    return {
-      currentTime: '12:00',
-    };
-  },
-  methods: {
-    filter(type, options) {
+  setup() {
+    const currentTime = ref('12:00');
+
+    const filter = (type, options) => {
       if (type === 'minute') {
-        return options.filter((option) => option % 5 === 0);
+        return options.filter((option) => Number(option) % 5 === 0);
       }
       return options;
-    },
+    };
+
+    return {
+      filter,
+      currentTime,
+    };
   },
 };
 ```
@@ -230,14 +257,13 @@ export default {
 ```
 
 ```js
+import { ref } from 'vue';
+
 export default {
-  data() {
-    return {
-      currentDate: new Date(),
-    };
-  },
-  methods: {
-    formatter(type, val) {
+  setup() {
+    const currentDate = ref(new Date());
+
+    const formatter = (type, val) => {
       if (type === 'year') {
         return val + '年';
       }
@@ -248,7 +274,12 @@ export default {
         return val + '日';
       }
       return val;
-    },
+    };
+
+    return {
+      formatter,
+      currentDate,
+    };
   },
 };
 ```
@@ -265,11 +296,11 @@ export default {
 | cancel-button-text | 取消按钮文字 | _string_ | `取消` |
 | show-toolbar | 是否显示顶部栏 | _boolean_ | `true` |
 | loading | 是否显示加载状态 | _boolean_ | `false` |
-| readonly `v2.10.5` | 是否为只读状态，只读状态下无法切换选项 | _boolean_ | `false` |
-| filter | 选项过滤函数 | _(type, vals) => vals_ | - |
-| formatter | 选项格式化函数 | _(type, val) => val_ | - |
-| columns-order `v2.9.2` | 自定义列排序数组, 子项可选值为<br> `year`、`month`、`day`、`hour`、`minute` | _string[]_ | - |
-| item-height `v2.8.6` | 选项高度，支持 `px` `vw` `rem` 单位，默认 `px` | _number \| string_ | `44` |
+| readonly | 是否为只读状态，只读状态下无法切换选项 | _boolean_ | `false` |
+| filter | 选项过滤函数 | _(type: string, values: string[]) => string[]_ | - |
+| formatter | 选项格式化函数 | _(type: string, value: string) => string_ | - |
+| columns-order | 自定义列排序数组, 子项可选值为<br> `year`、`month`、`day`、`hour`、`minute` | _string[]_ | - |
+| item-height | 选项高度，支持 `px` `vw` `vh` `rem` 单位，默认 `px` | _number \| string_ | `44` |
 | visible-item-count | 可见的选项个数 | _number \| string_ | `6` |
 | swipe-duration | 快速滑动时惯性滚动的时长，单位`ms` | _number \| string_ | `1000` |
 
@@ -297,17 +328,29 @@ export default {
 
 | 事件名  | 说明                     | 回调参数              |
 | ------- | ------------------------ | --------------------- |
-| change  | 当值变化时触发的事件     | picker: Picker 实例   |
+| change  | 当值变化时触发的事件     | value: 当前选中的时间 |
 | confirm | 点击完成按钮时触发的事件 | value: 当前选中的时间 |
 | cancel  | 点击取消按钮时触发的事件 | -                     |
 
+### Slots
+
+| 名称           | 说明                   | 参数                       |
+| -------------- | ---------------------- | -------------------------- |
+| default        | 自定义整个顶部栏的内容 | -                          |
+| title          | 自定义标题内容         | -                          |
+| confirm        | 自定义确认按钮内容     | -                          |
+| cancel         | 自定义取消按钮内容     | -                          |
+| option         | 自定义选项内容         | _option: string \| object_ |
+| columns-top    | 自定义选项上方内容     | -                          |
+| columns-bottom | 自定义选项下方内容     | -                          |
+
 ### 方法
 
-通过 ref 可以获取到 DatetimePicker 实例并调用实例方法，详见[组件实例方法](#/zh-CN/quickstart#zu-jian-shi-li-fang-fa)。
+通过 ref 可以获取到 DatetimePicker 实例并调用实例方法，详见[组件实例方法](#/zh-CN/advanced-usage#zu-jian-shi-li-fang-fa)。
 
 | 方法名 | 说明 | 参数 | 返回值 |
 | --- | --- | --- | --- |
-| getPicker `v2.5.3` | 获取 Picker 实例，用于调用 Picker 的[实例方法](#/zh-CN/picker#fang-fa) | - | - |
+| getPicker | 获取 Picker 实例，用于调用 Picker 的[实例方法](#/zh-CN/picker#fang-fa) | - | - |
 
 ## 常见问题
 
@@ -325,7 +368,7 @@ export default {
 
 ### 在桌面端无法操作组件？
 
-参见[在桌面端使用](#/zh-CN/quickstart#zai-zhuo-mian-duan-shi-yong)。
+参见[桌面端适配](#/zh-CN/advanced-usage#zhuo-mian-duan-gua-pei)。
 
 ### 是否有年份或月份选择器？
 

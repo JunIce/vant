@@ -6,12 +6,15 @@
 
 ### 引入
 
+通过以下方式来全局注册组件，更多注册方式请参考[组件注册](#/zh-CN/advanced-usage#zu-jian-zhu-ce)。
+
 ```js
-import Vue from 'vue';
+import { createApp } from 'vue';
 import { Collapse, CollapseItem } from 'vant';
 
-Vue.use(Collapse);
-Vue.use(CollapseItem);
+const app = createApp();
+app.use(Collapse);
+app.use(CollapseItem);
 ```
 
 ## 代码演示
@@ -24,16 +27,17 @@ Vue.use(CollapseItem);
 <van-collapse v-model="activeNames">
   <van-collapse-item title="标题1" name="1">内容</van-collapse-item>
   <van-collapse-item title="标题2" name="2">内容</van-collapse-item>
-  <van-collapse-item title="标题3" name="3" disabled>内容</van-collapse-item>
+  <van-collapse-item title="标题3" name="3">内容</van-collapse-item>
 </van-collapse>
 ```
 
 ```js
+import { ref } from 'vue';
+
 export default {
-  data() {
-    return {
-      activeNames: ['1'],
-    };
+  setup() {
+    const activeNames = ref(['1']);
+    return { activeNames };
   },
 };
 ```
@@ -51,16 +55,31 @@ export default {
 ```
 
 ```js
+import { ref } from 'vue';
+
 export default {
-  data() {
-    return {
-      activeName: '1',
-    };
+  setup() {
+    const activeName = ref('1');
+    return { activeName };
   },
 };
 ```
 
+### 禁用状态
+
+通过 `disabled` 属性来禁用单个面板。
+
+```html
+<van-collapse v-model="activeNames">
+  <van-collapse-item title="标题1" name="1">内容</van-collapse-item>
+  <van-collapse-item title="标题2" name="2" disabled>内容</van-collapse-item>
+  <van-collapse-item title="标题3" name="3" disabled>内容</van-collapse-item>
+</van-collapse>
+```
+
 ### 自定义标题内容
+
+通过 `title` 插槽可以自定义标题栏的内容。
 
 ```html
 <van-collapse v-model="activeNames">
@@ -77,11 +96,12 @@ export default {
 ```
 
 ```js
+import { ref } from 'vue';
+
 export default {
-  data() {
-    return {
-      activeNames: ['1'],
-    };
+  setup() {
+    const activeNames = ref(['1']);
+    return { activeNames };
   },
 };
 ```
@@ -115,6 +135,7 @@ export default {
 | border | 是否显示内边框 | _boolean_ | `true` |
 | is-link | 是否展示标题栏右侧箭头并开启点击反馈 | _boolean_ | `true` |
 | disabled | 是否禁用面板 | _boolean_ | `false` |
+| readonly `v3.0.12` | 是否为只读状态，只读状态下无法操作面板 | _boolean_ | `false` |
 | title-class | 左侧标题额外类名 | _string_ | - |
 | value-class | 右侧内容额外类名 | _string_ | - |
 | label-class | 描述信息额外类名 | _string_ | - |
@@ -131,8 +152,22 @@ export default {
 
 ### CollapseItem 方法
 
-通过 ref 可以获取到 CollapseItem 实例并调用实例方法，详见[组件实例方法](#/zh-CN/quickstart#zu-jian-shi-li-fang-fa)。
+通过 ref 可以获取到 CollapseItem 实例并调用实例方法，详见[组件实例方法](#/zh-CN/advanced-usage#zu-jian-shi-li-fang-fa)。
 
 | 方法名 | 说明 | 参数 | 返回值 |
 | --- | --- | --- | --- |
-| toggle `v2.10.9` | 切换面试展开状态，传 `true` 为展开，`false` 为收起，不传参为切换 | _expand?: boolean_ | - |
+| toggle | 切换面试展开状态，传 `true` 为展开，`false` 为收起，不传参为切换 | _expand?: boolean_ | - |
+
+### 样式变量
+
+组件提供了下列 Less 变量，可用于自定义样式，使用方法请参考[主题定制](#/zh-CN/theme)。
+
+| 名称                                    | 默认值                     | 描述 |
+| --------------------------------------- | -------------------------- | ---- |
+| @collapse-item-transition-duration      | `@animation-duration-base` | -    |
+| @collapse-item-content-padding          | `@padding-sm @padding-md`  | -    |
+| @collapse-item-content-font-size        | `@font-size-md`            | -    |
+| @collapse-item-content-line-height      | `1.5`                      | -    |
+| @collapse-item-content-text-color       | `@gray-6`                  | -    |
+| @collapse-item-content-background-color | `@white`                   | -    |
+| @collapse-item-title-disabled-color     | `@gray-5`                  | -    |

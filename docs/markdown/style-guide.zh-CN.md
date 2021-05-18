@@ -2,7 +2,7 @@
 
 ### 介绍
 
-在参与 Vant 开发时，请遵守约定的单文件组件风格指南，指南内容节选自 [Vue 官方风格指南](https://cn.vuejs.org/v2/style-guide)。
+在参与 Vant 开发时，请遵守约定的单文件组件风格指南，指南内容节选自 [Vue 官方风格指南](https://v3.cn.vuejs.org/style-guide/)。
 
 ### 组件数据
 
@@ -135,11 +135,13 @@ export default {
 export default {
   name: '',
 
-  mixins: [],
-
   components: {},
 
   props: {},
+
+  emits: [],
+
+  setup() {},
 
   data() {},
 
@@ -151,7 +153,7 @@ export default {
 
   mounted() {},
 
-  destroyed() {},
+  unmounted() {},
 
   methods: {},
 };
@@ -190,9 +192,7 @@ export default {
 单文件组件应该总是让顶级标签的顺序保持一致，且标签之间留有空行。
 
 ```html
-<template>
-  ...
-</template>
+<template> ... </template>
 
 <script>
   /* ... */

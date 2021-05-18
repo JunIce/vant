@@ -1,3 +1,4 @@
+import { nextTick } from 'vue';
 import { trigger } from './event';
 
 function mockHTMLElementOffset() {
@@ -36,21 +37,16 @@ export function mockScrollIntoView() {
   return fn;
 }
 
-export function mockGetBoundingClientRect(
-  rect: ClientRect | DOMRect
-): Function {
-  const originMethod = Element.prototype.getBoundingClientRect;
-
-  Element.prototype.getBoundingClientRect = <any>jest.fn(() => rect);
-
-  return function () {
-    Element.prototype.getBoundingClientRect = originMethod;
-  };
+export function mockGetBoundingClientRect(rect: Partial<DOMRect>): () => void {
+  const spy = jest.spyOn(Element.prototype, 'getBoundingClientRect');
+  spy.mockReturnValue(rect as DOMRect);
+  return () => spy.mockRestore();
 }
 
-export function mockScrollTop(value: number) {
+export async function mockScrollTop(value: number) {
   Object.defineProperty(window, 'scrollTop', { value, writable: true });
   trigger(window, 'scroll');
+  return nextTick();
 }
 
 mockScrollIntoView();

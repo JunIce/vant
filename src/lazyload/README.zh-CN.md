@@ -1,17 +1,24 @@
 # Lazyload 懒加载
 
+### 介绍
+
+当页面需要加载大量内容时，使用懒加载可以实现延迟加载页面可视区域外的内容，从而使页面加载更流畅。
+
 ### 引入
+
+通过以下方式来全局注册组件，更多注册方式请参考[组件注册](#/zh-CN/advanced-usage#zu-jian-zhu-ce)。
 
 `Lazyload` 是 `Vue` 指令，使用前需要对指令进行注册。
 
 ```js
-import Vue from 'vue';
+import { createApp } from 'vue';
 import { Lazyload } from 'vant';
 
-Vue.use(Lazyload);
+const app = createApp();
+app.use(Lazyload);
 
 // 注册时可以配置额外的选项
-Vue.use(Lazyload, {
+app.use(Lazyload, {
   lazyComponent: true,
 });
 ```
@@ -28,7 +35,7 @@ Vue.use(Lazyload, {
 
 ```js
 export default {
-  data() {
+  setup() {
     return {
       imageList: [
         'https://img.yzcdn.cn/vant/apple-1.jpg',
@@ -53,7 +60,7 @@ export default {
 
 ```js
 // 注册时设置`lazyComponent`选项
-Vue.use(Lazyload, {
+app.use(Lazyload, {
   lazyComponent: true,
 });
 ```

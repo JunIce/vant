@@ -6,11 +6,14 @@
 
 ### 引入
 
+通过以下方式来全局注册组件，更多注册方式请参考[组件注册](#/zh-CN/advanced-usage#zu-jian-zhu-ce)。
+
 ```js
-import Vue from 'vue';
+import { createApp } from 'vue';
 import { Image as VanImage } from 'vant';
 
-Vue.use(VanImage);
+const app = createApp();
+app.use(VanImage);
 ```
 
 ## 代码演示
@@ -63,10 +66,11 @@ Vue.use(VanImage);
 ```
 
 ```js
-import Vue from 'vue';
+import { createApp } from 'vue';
 import { Lazyload } from 'vant';
 
-Vue.use(Lazyload);
+const app = createApp();
+app.use(Lazyload);
 ```
 
 ### 加载中提示
@@ -100,15 +104,17 @@ Vue.use(Lazyload);
 | src | 图片链接 | _string_ | - |
 | fit | 图片填充模式 | _string_ | `fill` |
 | alt | 替代文本 | _string_ | - |
-| width | 宽度，默认单位为`px` | _number \| string_ | - |
-| height | 高度，默认单位为`px` | _number \| string_ | - |
-| radius | 圆角大小，默认单位为`px` | _number \| string_ | `0` |
+| width | 宽度，默认单位为 `px` | _number \| string_ | - |
+| height | 高度，默认单位为 `px` | _number \| string_ | - |
+| radius | 圆角大小，默认单位为 `px` | _number \| string_ | `0` |
 | round | 是否显示为圆形 | _boolean_ | `false` |
 | lazy-load | 是否开启图片懒加载，须配合 [Lazyload](#/zh-CN/lazyload) 组件使用 | _boolean_ | `false` |
 | show-error | 是否展示图片加载失败提示 | _boolean_ | `true` |
 | show-loading | 是否展示图片加载中提示 | _boolean_ | `true` |
-| error-icon `v2.4.2` | 失败时提示的[图标名称](#/zh-CN/icon)或图片链接 | _string_ | `photo-fail` |
-| loading-icon `v2.4.2` | 加载时提示的[图标名称](#/zh-CN/icon)或图片链接 | _string_ | `photo` |
+| error-icon | 失败时提示的[图标名称](#/zh-CN/icon)或图片链接 | _string_ | `photo-fail` |
+| loading-icon | 加载时提示的[图标名称](#/zh-CN/icon)或图片链接 | _string_ | `photo` |
+| icon-size `v3.0.11` | 加载图标和失败图标的大小 | _number \| string_ | `32px` |
+| icon-prefix | 图标类名前缀，同 Icon 组件的 [class-prefix 属性](#/zh-CN/icon#props) | _string_ | `van-icon` |
 
 ### 图片填充模式 
 
@@ -118,23 +124,37 @@ Vue.use(Lazyload);
 | cover      | 保持宽高缩放图片，使图片的短边能完全显示出来，裁剪长边 |
 | fill       | 拉伸图片，使图片填满元素                               |
 | none       | 保持图片原有尺寸                                       |
-| scale-down | 取`none`或`contain`中较小的一个                        |
+| scale-down | 取 `none` 或 `contain` 中较小的一个                    |
 
 ### Events
 
-| 事件名 | 说明               | 回调参数       |
-| ------ | ------------------ | -------------- |
-| click  | 点击图片时触发     | _event: Event_ |
-| load   | 图片加载完毕时触发 | -              |
-| error  | 图片加载失败时触发 | -              |
+| 事件名 | 说明               | 回调参数            |
+| ------ | ------------------ | ------------------- |
+| click  | 点击图片时触发     | _event: MouseEvent_ |
+| load   | 图片加载完毕时触发 | -                   |
+| error  | 图片加载失败时触发 | -                   |
 
 ### Slots
 
-| 名称             | 说明                       |
-| ---------------- | -------------------------- |
-| default `v2.9.0` | 自定义图片下方的内容       |
-| loading          | 自定义加载中的提示内容     |
-| error            | 自定义加载失败时的提示内容 |
+| 名称    | 说明                       |
+| ------- | -------------------------- |
+| default | 自定义图片下方的内容       |
+| loading | 自定义加载中的提示内容     |
+| error   | 自定义加载失败时的提示内容 |
+
+### 样式变量
+
+组件提供了下列 Less 变量，可用于自定义样式，使用方法请参考[主题定制](#/zh-CN/theme)。
+
+| 名称                                | 默认值              | 描述 |
+| ----------------------------------- | ------------------- | ---- |
+| @image-placeholder-text-color       | `@gray-6`           | -    |
+| @image-placeholder-font-size        | `@font-size-md`     | -    |
+| @image-placeholder-background-color | `@background-color` | -    |
+| @image-loading-icon-size            | `32px`              | -    |
+| @image-loading-icon-color           | `@gray-4`           | -    |
+| @image-error-icon-size              | `32px`              | -    |
+| @image-error-icon-color             | `@gray-4`           | -    |
 
 ## 常见问题
 

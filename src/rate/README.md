@@ -1,12 +1,19 @@
 # Rate
 
+### Intro
+
+The rate component is used for rating things.
+
 ### Install
 
+Register component globally via `app.use`, refer to [Component Registration](#/en-US/advanced-usage#zu-jian-zhu-ce) for more registration ways.
+
 ```js
-import Vue from 'vue';
+import { createApp } from 'vue';
 import { Rate } from 'vant';
 
-Vue.use(Rate);
+const app = createApp();
+app.use(Rate);
 ```
 
 ## Usage
@@ -18,11 +25,12 @@ Vue.use(Rate);
 ```
 
 ```js
+import { ref } from 'vue';
+
 export default {
-  data() {
-    return {
-      value: 3,
-    };
+  setup() {
+    const value = ref(3);
+    return { value };
   },
 };
 ```
@@ -48,15 +56,16 @@ export default {
 ### Half Star
 
 ```html
-<van-rate v-model="value" allow-half void-icon="star" void-color="#eee" />
+<van-rate v-model="value" allow-half />
 ```
 
 ```js
+import { ref } from 'vue';
+
 export default {
-  data() {
-    return {
-      value: 2.5,
-    };
+  setup() {
+    const value = ref(2.5);
+    return { value };
   },
 };
 ```
@@ -79,6 +88,23 @@ export default {
 <van-rate v-model="value" readonly />
 ```
 
+### Readonly Half Star
+
+```html
+<van-rate v-model="value" readonly />
+```
+
+```js
+import { ref } from 'vue';
+
+export default {
+  setup() {
+    const value = ref(3.3);
+    return { value };
+  },
+};
+```
+
 ### Change Event
 
 ```html
@@ -86,11 +112,17 @@ export default {
 ```
 
 ```javascript
+import { ref } from 'vue';
+import { Toast } from 'vant';
+
 export default {
-  method: {
-    onChange(value) {
-      Toast('current value:' + value);
-    },
+  setup() {
+    const value = ref(3);
+    const onChange = (value) => Toast('current value:' + value);
+    return {
+      value,
+      onChange,
+    };
   },
 };
 ```
@@ -110,7 +142,7 @@ export default {
 | disabled-color | Disabled color | _string_ | `#c8c9cc` |
 | icon | Selected icon | _string_ | `star` |
 | void-icon | Void icon | _string_ | `star-o` |
-| icon-prefix `v2.5.3` | Icon className prefix | _string_ | `van-icon` |
+| icon-prefix | Icon className prefix | _string_ | `van-icon` |
 | allow-half | Whether to allow half star | _boolean_ | `false` |
 | readonly | Whether to be readonly | _boolean_ | `false` |
 | disabled | Whether to disable rate | _boolean_ | `false` |
@@ -118,6 +150,18 @@ export default {
 
 ### Events
 
-| Event  | Description                 | Parameters   |
-| ------ | --------------------------- | ------------ |
-| change | Triggered when rate changed | current rate |
+| Event  | Description               | Parameters   |
+| ------ | ------------------------- | ------------ |
+| change | Emitted when rate changed | current rate |
+
+### Less Variables
+
+How to use: [Custom Theme](#/en-US/theme).
+
+| Name                      | Default Value   | Description |
+| ------------------------- | --------------- | ----------- |
+| @rate-icon-size           | `20px`          | -           |
+| @rate-icon-gutter         | `@padding-base` | -           |
+| @rate-icon-void-color     | `@gray-5`       | -           |
+| @rate-icon-full-color     | `@red`          | -           |
+| @rate-icon-disabled-color | `@gray-5`       | -           |

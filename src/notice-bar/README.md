@@ -1,12 +1,19 @@
 # NoticeBar
 
+### Intro
+
+Used to display a group of message notifications in a continuons loop.
+
 ### Install
 
+Register component globally via `app.use`, refer to [Component Registration](#/en-US/advanced-usage#zu-jian-zhu-ce) for more registration ways.
+
 ```js
-import Vue from 'vue';
+import { createApp } from 'vue';
 import { NoticeBar } from 'vant';
 
-Vue.use(NoticeBar);
+const app = createApp();
+app.use(NoticeBar);
 ```
 
 ## Usage
@@ -33,21 +40,15 @@ Vue.use(NoticeBar);
 ### Wrapable
 
 ```html
-<van-notice-bar wrapable :scrollable="false">
-  Notice Content
-</van-notice-bar>
+<van-notice-bar wrapable :scrollable="false">Notice Content</van-notice-bar>
 ```
 
 ### Mode
 
 ```html
-<van-notice-bar mode="closeable">
-  Notice Content
-</van-notice-bar>
+<van-notice-bar mode="closeable">Notice Content</van-notice-bar>
 
-<van-notice-bar mode="link">
-  Notice Content
-</van-notice-bar>
+<van-notice-bar mode="link">Notice Content</van-notice-bar>
 ```
 
 ### Custom Style
@@ -94,17 +95,17 @@ Vue.use(NoticeBar);
 | background | Background color | _string_ | `#fff7cc` |
 | left-icon | Left Icon | _string_ | - |
 | delay | Animation delay (s) | _number \| string_ | `1` |
-| speed | Scroll speed (px/s) | _number \| string_ | `50` |
+| speed | Scroll speed (px/s) | _number \| string_ | `60` |
 | scrollable | Whether to scroll content | _boolean_ | - |
 | wrapable | Whether to enable text wrap | _boolean_ | `false` | - |
 
 ### Events
 
-| Event           | Description                    | Arguments      |
-| --------------- | ------------------------------ | -------------- |
-| click           | Triggered when click NoticeBar | _event: Event_ |
-| close           | Triggered when closed          | _event: Event_ |
-| replay `v2.6.2` | Triggered when replay          | -              |
+| Event  | Description                        | Arguments           |
+| ------ | ---------------------------------- | ------------------- |
+| click  | Emitted when NoticeBar is clicked  | _event: MouseEvent_ |
+| close  | Emitted when NoticeBar is closed   | _event: MouseEvent_ |
+| replay | Emitted when NoticeBar is replayed | -                   |
 
 ### Slots
 
@@ -113,3 +114,19 @@ Vue.use(NoticeBar);
 | default    | Notice text content |
 | left-icon  | Custom left icon    |
 | right-icon | Custom right icon   |
+
+### Less Variables
+
+How to use: [Custom Theme](#/en-US/theme).
+
+| Name                         | Default Value             | Description |
+| ---------------------------- | ------------------------- | ----------- |
+| @notice-bar-height           | `40px`                    | -           |
+| @notice-bar-padding          | `0 @padding-md`           | -           |
+| @notice-bar-wrapable-padding | `@padding-xs @padding-md` | -           |
+| @notice-bar-text-color       | `@orange-dark`            | -           |
+| @notice-bar-font-size        | `@font-size-md`           | -           |
+| @notice-bar-line-height      | `24px`                    | -           |
+| @notice-bar-background-color | `@orange-light`           | -           |
+| @notice-bar-icon-size        | `16px`                    | -           |
+| @notice-bar-icon-min-width   | `24px`                    | -           |

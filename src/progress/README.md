@@ -1,12 +1,19 @@
 # Progress
 
+### Intro
+
+Used to show the current progress of the operation.
+
 ### Install
 
+Register component globally via `app.use`, refer to [Component Registration](#/en-US/advanced-usage#zu-jian-zhu-ce) for more registration ways.
+
 ```js
-import Vue from 'vue';
+import { createApp } from 'vue';
 import { Progress } from 'vant';
 
-Vue.use(Progress);
+const app = createApp();
+app.use(Progress);
 ```
 
 ## Usage
@@ -61,3 +68,26 @@ Use `pivot-text` to custom text，use `color` to custom bar color.
 | text-color | Pivot text color | _string_ | `white` |
 | inactive | Whether to be gray | _boolean_ | `false` |
 | show-pivot | Whether to show text | _boolean_ | `true` |
+
+### Methods
+
+Use [ref](https://vuejs.org/v2/api/#ref) to get Progress instance and call instance methods.
+
+| Name | Description | Attribute | Return value |
+| --- | --- | --- | --- |
+| resize | Resize Progress when container element resized or visibility changed | - | - |
+
+### Less Variables
+
+How to use: [Custom Theme](#/en-US/theme).
+
+| Name                             | Default Value   | Description |
+| -------------------------------- | --------------- | ----------- |
+| @progress-height                 | `4px`           | -           |
+| @progress-color                  | `@blue`         | -           |
+| @progress-background-color       | `@gray-3`       | -           |
+| @progress-pivot-padding          | `0 5px`         | -           |
+| @progress-pivot-text-color       | `@white`        | -           |
+| @progress-pivot-font-size        | `@font-size-xs` | -           |
+| @progress-pivot-line-height      | `1.6`           | -           |
+| @progress-pivot-background-color | `@blue`         | -           |

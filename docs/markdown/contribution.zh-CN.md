@@ -19,10 +19,12 @@
 
 ```bash
 # 克隆仓库
+# 默认为 dev 分支，包含 Vant 3 的代码
+# 如果需要在 Vant 2 上进行更改，请基于 2.x 分支进行开发
 git clone git@github.com:youzan/vant.git
 
 # 安装依赖
-cd vant && npm run bootstrap
+cd vant && yarn
 
 # 进入开发模式，浏览器访问 http://localhost:8080
 npm run dev

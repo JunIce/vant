@@ -16,8 +16,8 @@
         :rules="[{ required: true, message: t('requirePassword') }]"
         :placeholder="t('password')"
       />
-      <div style="margin: 16px 16px 0;">
-        <van-button round block type="info" native-type="submit">
+      <div style="margin: 16px 16px 0">
+        <van-button round block type="primary" native-type="submit">
           {{ t('submit') }}
         </van-button>
       </div>
@@ -25,39 +25,53 @@
   </demo-block>
 </template>
 
-<script>
-export default {
-  i18n: {
-    'zh-CN': {
-      submit: '提交',
-      username: '用户名',
-      password: '密码',
-      requireUsername: '请填写用户名',
-      requirePassword: '请填写密码',
-    },
-    'en-US': {
-      submit: 'Submit',
-      username: 'Username',
-      password: 'Password',
-      requireUsername: 'Username is required',
-      requirePassword: 'Password is required',
-    },
-  },
+<script lang="ts">
+import { reactive, toRefs } from 'vue';
+import { useTranslate } from '@demo/use-translate';
+import { FieldValidateError } from '../../field/types';
 
-  data() {
-    return {
+const i18n = {
+  'zh-CN': {
+    submit: '提交',
+    username: '用户名',
+    password: '密码',
+    requireUsername: '请填写用户名',
+    requirePassword: '请填写密码',
+  },
+  'en-US': {
+    submit: 'Submit',
+    username: 'Username',
+    password: 'Password',
+    requireUsername: 'Username is required',
+    requirePassword: 'Password is required',
+  },
+};
+
+export default {
+  setup() {
+    const t = useTranslate(i18n);
+    const state = reactive({
       username: '',
       password: '',
-    };
-  },
+    });
 
-  methods: {
-    onSubmit(values) {
+    const onSubmit = (values: Record<string, string>) => {
       console.log('submit', values);
-    },
-    onFailed(errorInfo) {
+    };
+
+    const onFailed = (errorInfo: {
+      values: Record<string, string>;
+      errors: FieldValidateError[];
+    }) => {
       console.log('failed', errorInfo);
-    },
+    };
+
+    return {
+      ...toRefs(state),
+      t,
+      onSubmit,
+      onFailed,
+    };
   },
 };
 </script>

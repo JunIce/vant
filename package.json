@@ -1,36 +1,32 @@
 {
   "name": "vant",
-  "version": "2.10.9",
+  "version": "3.0.16",
   "description": "Mobile UI Components built on Vue",
   "main": "lib/index.js",
   "module": "es/index.js",
   "style": "lib/index.css",
-  "typings": "types/index.d.ts",
+  "typings": "lib/index.d.ts",
   "files": [
     "es",
     "lib",
-    "types",
     "vetur"
   ],
   "publishConfig": {
     "registry": "https://registry.npmjs.org/"
   },
   "scripts": {
-    "bootstrap": "yarn || npm i",
     "dev": "vant-cli dev",
     "lint": "vant-cli lint",
     "test": "vant-cli test",
     "build": "vant-cli build",
-    "release": "vant-cli release",
+    "prepare": "husky install",
+    "release": "vant-cli release --tag next",
     "test:watch": "vant-cli test --watch",
-    "release:site": "sh docs/site/release.sh",
+    "release:site": "vant-cli build-site && gh-pages -d site --add --dest v3",
     "test:coverage": "open test/coverage/index.html"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "commit-msg": "vant-cli commit-lint"
-    }
+  "npm": {
+    "tag": "next"
   },
   "lint-staged": {
     "*.md": "prettier --write",
@@ -45,27 +41,28 @@
   "keywords": [
     "ui",
     "vue",
+    "vue3",
+    "mobile",
     "frontend",
-    "mobile ui",
     "component",
     "components"
   ],
   "author": "youzanfe",
   "license": "MIT",
   "dependencies": {
-    "@babel/runtime": "7.x",
-    "@vant/icons": "1.3.1",
-    "@vue/babel-helper-vue-jsx-merge-props": "^1.0.0",
-    "vue-lazyload": "1.2.3"
+    "@vant/icons": "^1.6.0",
+    "@vant/lazyload": "^1.2.0",
+    "@vant/popperjs": "^1.1.0",
+    "@vant/use": "^1.1.2"
   },
   "peerDependencies": {
-    "vue": ">= 2.5.22"
+    "vue": "^3.0.0"
   },
   "devDependencies": {
-    "@vant/cli": "^2.6.0",
-    "prettier": "^2.0.4",
-    "vue": "^2.6.11",
-    "vue-template-compiler": "^2.6.11"
+    "@vant/cli": "^3.10.4",
+    "@vant/area-data": "^1.1.1",
+    "@vue/compiler-sfc": "^3.0.11",
+    "vue": "^3.0.11"
   },
   "sideEffects": [
     "es/**/style/*",
@@ -78,23 +75,6 @@
     "attributes": "vetur/attributes.json"
   },
   "web-types": "vetur/web-types.json",
-  "eslintConfig": {
-    "root": true,
-    "extends": [
-      "@vant"
-    ]
-  },
-  "stylelint": {
-    "extends": [
-      "@vant/stylelint-config"
-    ]
-  },
-  "prettier": {
-    "singleQuote": true,
-    "proseWrap": "never"
-  },
-  "browserslist": [
-    "Android >= 4.0",
-    "iOS >= 8"
-  ]
+  "unpkg": "lib/vant.min.js",
+  "jsdelivr": "lib/vant.min.js"
 }

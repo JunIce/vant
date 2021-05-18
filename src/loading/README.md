@@ -1,12 +1,19 @@
 # Loading
 
+### Intro
+
+Used to indicate the transition state during loading.
+
 ### Install
 
+Register component globally via `app.use`, refer to [Component Registration](#/en-US/advanced-usage#zu-jian-zhu-ce) for more registration ways.
+
 ```js
-import Vue from 'vue';
+import { createApp } from 'vue';
 import { Loading } from 'vant';
 
-Vue.use(Loading);
+const app = createApp();
+app.use(Loading);
 ```
 
 ## Usage
@@ -47,6 +54,18 @@ Vue.use(Loading);
 <van-loading size="24px" vertical>Loading...</van-loading>
 ```
 
+### Text Color
+
+use `color` or `text-color` to change text color.
+
+```html
+<!-- the color of text and icon will be changed -->
+<van-loading color="#0094ff" />
+
+<!-- only change text color -->
+<van-loading text-color="#0094ff" />
+```
+
 ## API
 
 ### Props
@@ -57,6 +76,7 @@ Vue.use(Loading);
 | type | Can be set to `spinner` | _string_ | `circular` |
 | size | Icon size | _number \| string_ | `30px` |
 | text-size | Text font size | _number \| string_ | `14px` |
+| text-color | Text color | _string_ | `#c9c9c9` |
 | vertical | Whether to arrange icons and text content vertically | _boolean_ | `false` |
 
 ### Slots
@@ -64,3 +84,15 @@ Vue.use(Loading);
 | Name    | Description  |
 | ------- | ------------ |
 | default | Loading text |
+
+### Less Variables
+
+How to use: [Custom Theme](#/en-US/theme).
+
+| Name                                | Default Value   | Description |
+| ----------------------------------- | --------------- | ----------- |
+| @loading-text-color                 | `@gray-6`       | -           |
+| @loading-text-font-size             | `@font-size-md` | -           |
+| @loading-spinner-color              | `@gray-5`       | -           |
+| @loading-spinner-size               | `30px`          | -           |
+| @loading-spinner-animation-duration | `0.8s`          | -           |

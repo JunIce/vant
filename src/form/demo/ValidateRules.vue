@@ -1,6 +1,6 @@
 <template>
   <demo-block :title="t('title')">
-    <van-form validate-first @sumbit="onSubmit" @failed="onFailed">
+    <van-form @sumbit="onSubmit" @failed="onFailed">
       <van-field
         v-model="value1"
         name="pattern"
@@ -17,13 +17,20 @@
       />
       <van-field
         v-model="value3"
+        name="validatorMessage"
+        :label="t('label')"
+        :rules="[{ validator: validatorMessage }]"
+        :placeholder="t('validatorMessage')"
+      />
+      <van-field
+        v-model="value4"
         name="asyncValidator"
         :label="t('label')"
         :rules="[{ validator: asyncValidator, message: t('message') }]"
         :placeholder="t('asyncValidator')"
       />
-      <div style="margin: 16px 16px 0;">
-        <van-button round block type="info" native-type="submit">
+      <div style="margin: 16px 16px 0">
+        <van-button round block type="primary" native-type="submit">
           {{ t('submit') }}
         </van-button>
       </div>
@@ -31,63 +38,84 @@
   </demo-block>
 </template>
 
-<script>
-export default {
-  i18n: {
-    'zh-CN': {
-      label: '文本',
-      title: '校验规则',
-      submit: '提交',
-      message: '请输入正确内容',
-      pattern: '正则校验',
-      validator: '函数校验',
-      validating: '验证中...',
-      asyncValidator: '异步函数校验',
-    },
-    'en-US': {
-      label: 'Label',
-      title: 'Validate Rules',
-      submit: 'Submit',
-      message: 'Error message',
-      pattern: 'Use pattern',
-      validator: 'Use validator',
-      validating: 'Validating...',
-      asyncValidator: 'Use async validator',
-    },
-  },
+<script lang="ts">
+import { reactive, toRefs } from 'vue';
+import { useTranslate } from '@demo/use-translate';
+import { FieldValidateError } from '../../field/types';
+import { Toast } from '../../toast';
 
-  data() {
-    return {
+const i18n = {
+  'zh-CN': {
+    label: '文本',
+    title: '校验规则',
+    submit: '提交',
+    message: '请输入正确内容',
+    invalid: (val: string) => `${val} 不合法，请重新输入`,
+    pattern: '正则校验',
+    validator: '函数校验',
+    validating: '验证中...',
+    asyncValidator: '异步函数校验',
+    validatorMessage: '校验函数返回错误提示',
+  },
+  'en-US': {
+    label: 'Label',
+    title: 'Validate Rules',
+    submit: 'Submit',
+    message: 'Error message',
+    invalid: (val: string) => `${val} is invalid`,
+    pattern: 'Use pattern',
+    validator: 'Use validator',
+    validating: 'Validating...',
+    asyncValidator: 'Use async validator',
+    validatorMessage: 'Use validator to return message',
+  },
+};
+
+export default {
+  setup() {
+    const t = useTranslate(i18n);
+    const state = reactive({
       value1: '',
       value2: '',
-      value3: '',
-      pattern: /\d{6}/,
-    };
-  },
+      value3: 'abc',
+      value4: '',
+    });
 
-  methods: {
-    validator(val) {
-      return /1\d{10}/.test(val);
-    },
+    const validator = (val: string) => /1\d{10}/.test(val);
 
-    asyncValidator(val) {
-      return new Promise((resolve) => {
-        this.$toast.loading(this.t('validating'));
+    const validatorMessage = (val: string) => t('invalid', val);
+
+    const asyncValidator = (val: string) =>
+      new Promise((resolve) => {
+        Toast.loading(t('validating'));
 
         setTimeout(() => {
-          this.$toast.clear();
+          Toast.clear();
           resolve(val === '1234');
         }, 1000);
       });
-    },
 
-    onSubmit(values) {
+    const onSubmit = (values: Record<string, string>) => {
       console.log('submit', values);
-    },
+    };
 
-    onFailed(errorInfo) {
+    const onFailed = (errorInfo: {
+      values: Record<string, string>;
+      errors: FieldValidateError[];
+    }) => {
       console.log('failed', errorInfo);
-    },
+    };
+
+    return {
+      ...toRefs(state),
+      t,
+      pattern: /\d{6}/,
+      onSubmit,
+      onFailed,
+      validator,
+      asyncValidator,
+      validatorMessage,
+    };
   },
 };
 </script>

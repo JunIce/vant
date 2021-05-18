@@ -1,13 +1,20 @@
 # Steps
 
+### Intro
+
+Used to show the various parts of the action flow and let the user know where the current action fits into the overall flow.
+
 ### Install
 
+Register component globally via `app.use`, refer to [Component Registration](#/en-US/advanced-usage#zu-jian-zhu-ce) for more registration ways.
+
 ```js
-import Vue from 'vue';
+import { createApp } from 'vue';
 import { Step, Steps } from 'vant';
 
-Vue.use(Step);
-Vue.use(Steps);
+const app = createApp();
+app.use(Step);
+app.use(Steps);
 ```
 
 ## Usage
@@ -24,11 +31,12 @@ Vue.use(Steps);
 ```
 
 ```js
+import { ref } from 'vue';
+
 export default {
-  data() {
-    return {
-      active: 1,
-    };
+  setup() {
+    const active = ref(1);
+    return { active };
   },
 };
 ```
@@ -72,19 +80,41 @@ export default {
 | active | Active step | _number \| string_ | `0` |
 | direction | Can be set to `vertical` | _string_ | `horizontal` |
 | active-color | Active step color | _string_ | `#07c160` |
-| inactive-color `v2.9.1` | Inactive step color | _string_ | `#969799` |
+| inactive-color | Inactive step color | _string_ | `#969799` |
 | active-icon | Active icon name | _string_ | `checked` |
 | inactive-icon | Inactive icon name | _string_ | - |
+| finish-icon `v3.0.7` | Finish icon name | _string_ | - |
+| icon-prefix `v3.0.15` | Icon className prefix | _string_ | `van-icon` |
 
 ### Step Slots
 
-| Name          | Description          |
-| ------------- | -------------------- |
-| active-icon   | Custom active icon   |
-| inactive-icon | Custom inactive icon |
+| Name                 | Description          |
+| -------------------- | -------------------- |
+| active-icon          | Custom active icon   |
+| inactive-icon        | Custom inactive icon |
+| finish-icon `v3.0.7` | Custom finish icon   | _string_ | - |
 
 ### Steps Events
 
 | Event | Description | Arguments |
 | --- | --- | --- |
-| click-step `v2.5.9` | Triggered when a step's title or icon is clicked | _index: number_ |
+| click-step | Emitted when a step's title or icon is clicked | _index: number_ |
+
+### Less Variables
+
+How to use: [Custom Theme](#/en-US/theme).
+
+| Name                             | Default Value   | Description |
+| -------------------------------- | --------------- | ----------- |
+| @step-text-color                 | `@gray-6`       | -           |
+| @step-active-color               | `@green`        | -           |
+| @step-process-text-color         | `@text-color`   | -           |
+| @step-font-size                  | `@font-size-md` | -           |
+| @step-line-color                 | `@border-color` | -           |
+| @step-finish-line-color          | `@green`        | -           |
+| @step-finish-text-color          | `@text-color`   | -           |
+| @step-icon-size                  | `12px`          | -           |
+| @step-circle-size                | `5px`           | -           |
+| @step-circle-color               | `@gray-6`       | -           |
+| @step-horizontal-title-font-size | `@font-size-sm` | -           |
+| @steps-background-color          | `@white`        | -           |

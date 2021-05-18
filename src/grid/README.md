@@ -1,13 +1,20 @@
 # Grid
 
+### Intro
+
+Used to divide the page into blocks of equal width in the horizontal direction for displaying content or page navigation.
+
 ### Install
 
+Register component globally via `app.use`, refer to [Component Registration](#/en-US/advanced-usage#zu-jian-zhu-ce) for more registration ways.
+
 ```js
-import Vue from 'vue';
+import { createApp } from 'vue';
 import { Grid, GridItem } from 'vant';
 
-Vue.use(Grid);
-Vue.use(GridItem);
+const app = createApp();
+app.use(Grid);
+app.use(GridItem);
 ```
 
 ## Usage
@@ -66,7 +73,7 @@ Vue.use(GridItem);
 ### Horizontal
 
 ```html
-<van-grid direction="horizontal" :column-num="2">
+<van-grid direction="horizontal" :column-num="3">
   <van-grid-item icon="photo-o" text="文字" />
   <van-grid-item icon="photo-o" text="文字" />
   <van-grid-item icon="photo-o" text="文字" />
@@ -104,7 +111,7 @@ Vue.use(GridItem);
 | center | Whether to center content | _boolean_ | `true` |
 | square | Whether to be square shape | _boolean_ | `false` |
 | clickable | Whether to show click feedback when clicked | _boolean_ | `false` |
-| direction `v2.8.2` | Content arrangement direction, can be set to `horizontal` | _string_ | `vertical` |
+| direction | Content arrangement direction, can be set to `horizontal` | _string_ | `vertical` |
 
 ### GridItem Props
 
@@ -112,18 +119,18 @@ Vue.use(GridItem);
 | --- | --- | --- | --- |
 | text | Text | _string_ | - |
 | icon | Icon name or URL | _string_ | - |
-| icon-prefix `v2.5.3` | Icon className prefix | _string_ | `van-icon` |
+| icon-prefix | Icon className prefix | _string_ | `van-icon` |
 | dot | Whether to show red dot | _boolean_ | `false` |
-| badge `v2.5.6` | Content of the badge | _number \| string_ | - |
+| badge | Content of the badge | _number \| string_ | - |
 | url | Link URL | _string_ | - |
 | to | Target route of the link, same as to of vue-router | _string \| object_ | - |
 | replace | If true, the navigation will not leave a history record | _boolean_ | `false` |
 
 ### GridItem Events
 
-| Event | Description            | Arguments      |
-| ----- | ---------------------- | -------------- |
-| click | Triggered when clicked | _event: Event_ |
+| Event | Description                       | Arguments           |
+| ----- | --------------------------------- | ------------------- |
+| click | Emitted when component is clicked | _event: MouseEvent_ |
 
 ### GridItem Slots
 
@@ -132,3 +139,16 @@ Vue.use(GridItem);
 | default | Custom content |
 | icon    | Custom icon    |
 | text    | Custom text    |
+
+### Less Variables
+
+How to use: [Custom Theme](#/en-US/theme).
+
+| Name | Default Value | Description |
+| --- | --- | --- |
+| @grid-item-content-padding | `@padding-md @padding-xs` | - |
+| @grid-item-content-background-color | `@white` | - |
+| @grid-item-content-active-color | `@active-color` | - |
+| @grid-item-icon-size | `28px` | - |
+| @grid-item-text-color | `@gray-7` | - |
+| @grid-item-text-font-size | `@font-size-sm` | - |

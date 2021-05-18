@@ -1,12 +1,19 @@
 # PullRefresh 下拉刷新
 
+### 介绍
+
+用于提供下拉刷新的交互操作。
+
 ### 引入
 
+通过以下方式来全局注册组件，更多注册方式请参考[组件注册](#/zh-CN/advanced-usage#zu-jian-zhu-ce)。
+
 ```js
-import Vue from 'vue';
+import { createApp } from 'vue';
 import { PullRefresh } from 'vant';
 
-Vue.use(PullRefresh);
+const app = createApp();
+app.use(PullRefresh);
 ```
 
 ## 代码演示
@@ -16,29 +23,33 @@ Vue.use(PullRefresh);
 下拉刷新时会触发 `refresh` 事件，在事件的回调函数中可以进行同步或异步操作，操作完成后将 `v-model` 设置为 `false`，表示加载完成。
 
 ```html
-<van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-  <p>刷新次数: {{ count }}</p>
+<van-pull-refresh v-model="state.loading" @refresh="onRefresh">
+  <p>刷新次数: {{ state.count }}</p>
 </van-pull-refresh>
 ```
 
 ```js
+import { reactive } from 'vue';
 import { Toast } from 'vant';
 
 export default {
-  data() {
-    return {
+  setup() {
+    const state = reactive({
       count: 0,
-      isLoading: false,
-    };
-  },
-  methods: {
-    onRefresh() {
+      loading: false,
+    });
+    const onRefresh = () => {
       setTimeout(() => {
         Toast('刷新成功');
-        this.isLoading = false;
-        this.count++;
+        state.loading = false;
+        state.count++;
       }, 1000);
-    },
+    };
+
+    return {
+      state,
+      onRefresh,
+    };
   },
 };
 ```
@@ -107,7 +118,8 @@ export default {
 | success-text | 刷新成功提示文案 | _string_ | - |
 | success-duration | 刷新成功提示展示时长(ms) | _number \| string_ | `500` |
 | animation-duration | 动画时长 | _number \| string_ | `300` |
-| head-height `v2.4.2` | 顶部内容高度 | _number \| string_ | `50` |
+| head-height | 顶部内容高度 | _number \| string_ | `50` |
+| pull-distance `v3.0.8` | 触发下拉刷新的距离 | _number \| string_ | 与 `head-height` 一致 |
 | disabled | 是否禁用下拉刷新 | _boolean_ | `false` |
 
 ### Events
@@ -118,7 +130,7 @@ export default {
 
 ### Slots
 
-| 名称    | 说明                 | SlotProps                  |
+| 名称    | 说明                 | 参数                       |
 | ------- | -------------------- | -------------------------- |
 | default | 自定义内容           | -                          |
 | normal  | 非下拉状态时顶部内容 | -                          |
@@ -126,6 +138,17 @@ export default {
 | loosing | 释放过程中顶部内容   | { distance: 当前下拉距离 } |
 | loading | 加载过程中顶部内容   | { distance: 当前下拉距离 } |
 | success | 刷新成功提示内容     | -                          |
+
+### 样式变量
+
+组件提供了下列 Less 变量，可用于自定义样式，使用方法请参考[主题定制](#/zh-CN/theme)。
+
+| 名称                            | 默认值          | 描述 |
+| ------------------------------- | --------------- | ---- |
+| @pull-refresh-head-height       | `50px`          | -    |
+| @pull-refresh-head-font-size    | `@font-size-md` | -    |
+| @pull-refresh-head-text-color   | `@gray-6`       | -    |
+| @pull-refresh-loading-icon-size | `16px`          | -    |
 
 ## 常见问题
 
@@ -139,4 +162,4 @@ export default {
 
 ### 在桌面端无法操作组件？
 
-参见[在桌面端使用](#/zh-CN/quickstart#zai-zhuo-mian-duan-shi-yong)。
+参见[桌面端适配](#/zh-CN/advanced-usage#zhuo-mian-duan-gua-pei)。

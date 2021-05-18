@@ -1,12 +1,19 @@
 # Slider
 
+### Intro
+
+Used to select a value within a given range.
+
 ### Install
 
+Register component globally via `app.use`, refer to [Component Registration](#/en-US/advanced-usage#zu-jian-zhu-ce) for more registration ways.
+
 ```js
-import Vue from 'vue';
+import { createApp } from 'vue';
 import { Slider } from 'vant';
 
-Vue.use(Slider);
+const app = createApp();
+app.use(Slider);
 ```
 
 ## Usage
@@ -18,18 +25,17 @@ Vue.use(Slider);
 ```
 
 ```js
+import { ref } from 'vue';
 import { Toast } from 'vant';
 
 export default {
-  data() {
+  setup() {
+    const value = ref(50);
+    const onChange = (value) => Toast('Current value: ' + value);
     return {
-      value: 50,
+      value,
+      onChange,
     };
-  },
-  methods: {
-    onChange(value) {
-      Toast('Current value：' + value);
-    },
   },
 };
 ```
@@ -43,19 +49,18 @@ Add `range` attribute to open dual thumb mode.
 ```
 
 ```js
+import { ref } from 'vue';
 import { Toast } from 'vant';
 
 export default {
-  data() {
+  setup() {
+    // value must be an Array
+    const value = ref([10, 50]);
+    const onChange = (value) => Toast('Current value: ' + value);
     return {
-      // value must be an Array
-      value: [10, 50],
+      value,
+      onChange,
     };
-  },
-  methods: {
-    onChange(value) {
-      Toast('current value：' + value);
-    },
   },
 };
 ```
@@ -122,19 +127,19 @@ export default {
 ```
 
 ```js
+import { ref } from 'vue';
 import { Toast } from 'vant';
 
 export default {
-  data() {
+  setup() {
+    const value = ref(50);
+    const value2 = ref([10, 50]);
+    const onChange = (value) => Toast('Current value: ' + value);
     return {
-      value: 50,
-      value2: [10, 50],
+      value,
+      value2,
+      onChange,
     };
-  },
-  methods: {
-    onChange(value) {
-      Toast('Current value：' + value);
-    },
   },
 };
 ```
@@ -145,29 +150,46 @@ export default {
 
 | Attribute | Description | Type | Default |
 | --- | --- | --- | --- |
-| value | Current value | _number \| array_ | `0` |
+| v-model | Current value | _number \| number[]_ | `0` |
 | max | Max value | _number \| string_ | `100` |
 | min | Min value | _number \| string_ | `0` |
 | step | Step size | _number \| string_ | `1` |
 | bar-height | Height of bar | _number \| string_ | `2px` |
-| button-size `v2.4.5` | Button size | _number \| string_ | `24px` |
+| button-size | Button size | _number \| string_ | `24px` |
 | active-color | Active color of bar | _string_ | `#1989fa` |
 | inactive-color | Inactive color of bar | _string_ | `#e5e5e5` |
-| range `v2.10.7` | Whether to enable dual thumb mode | _boolean_ | `false` |
+| range | Whether to enable dual thumb mode | _boolean_ | `false` |
 | disabled | Whether to disable slider | _boolean_ | `false` |
+| readonly `v3.0.5` | Whether to be readonly | _boolean_ | `false` |
 | vertical | Whether to display slider vertically | _boolean_ | `false` |
 
 ### Events
 
-| Event      | Description                          | Arguments           |
-| ---------- | ------------------------------------ | ------------------- |
-| input      | Instant triggered when value changed | value: current rate |
-| change     | Triggered after value changed        | value: current rate |
-| drag-start | Triggered when start drag            | -                   |
-| drag-end   | Triggered when end drag              | -                   |
+| Event              | Description                    | Arguments           |
+| ------------------ | ------------------------------ | ------------------- |
+| update:model-value | Emitted when value is changing | value: current rate |
+| change             | Emitted after value changed    | value: current rate |
+| drag-start         | Emitted when start draging     | -                   |
+| drag-end           | Emitted when end draging       | -                   |
 
 ### Slots
 
 | Name   | Description   |
 | ------ | ------------- |
 | button | Custom button |
+
+### Less Variables
+
+How to use: [Custom Theme](#/en-US/theme).
+
+| Name | Default Value | Description |
+| --- | --- | --- |
+| @slider-active-background-color | `@blue` | - |
+| @slider-inactive-background-color | `@gray-3` | - |
+| @slider-disabled-opacity | `@disabled-opacity` | - |
+| @slider-bar-height | `2px` | - |
+| @slider-button-width | `24px` | - |
+| @slider-button-height | `24px` | - |
+| @slider-button-border-radius | `50%` | - |
+| @slider-button-background-color | `@white` | - |
+| @slider-button-box-shadow | `0 1px 2px rgba(0, 0, 0, 0.5)` | - |

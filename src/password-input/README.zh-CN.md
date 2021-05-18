@@ -6,12 +6,15 @@
 
 ### 引入
 
+通过以下方式来全局注册组件，更多注册方式请参考[组件注册](#/zh-CN/advanced-usage#zu-jian-zhu-ce)。
+
 ```js
-import Vue from 'vue';
+import { createApp } from 'vue';
 import { PasswordInput, NumberKeyboard } from 'vant';
 
-Vue.use(PasswordInput);
-Vue.use(NumberKeyboard);
+const app = createApp();
+app.use(PasswordInput);
+app.use(NumberKeyboard);
 ```
 
 ## 代码演示
@@ -36,11 +39,16 @@ Vue.use(NumberKeyboard);
 ```
 
 ```js
+import { ref } from 'vue';
+
 export default {
-  data() {
+  setup() {
+    const value = ref('123');
+    const showKeyboard = ref(true);
+
     return {
-      value: '123',
-      showKeyboard: true,
+      value,
+      showKeyboard,
     };
   },
 };
@@ -105,22 +113,27 @@ export default {
 ```
 
 ```js
+import { ref, watch } from 'vue';
+
 export default {
-  data() {
-    return {
-      value: '123',
-      errorInfo: '',
-      showKeyboard: true,
-    };
-  },
-  watch: {
-    value(value) {
-      if (value.length === 6 && value !== '123456') {
-        this.errorInfo = '密码错误';
+  setup() {
+    const value = ref('123');
+    const errorInfo = ref('');
+    const showKeyboard = ref(true);
+
+    watch(value, (newVal) => {
+      if (newVal.length === 6 && newVal !== '123456') {
+        errorInfo.value = '密码错误';
       } else {
-        this.errorInfo = '';
+        errorInfo.value = '';
       }
-    },
+    });
+
+    return {
+      value,
+      errorInfo,
+      showKeyboard,
+    };
   },
 };
 ```
@@ -144,3 +157,24 @@ export default {
 | 事件名 | 说明             | 回调参数 |
 | ------ | ---------------- | -------- |
 | focus  | 输入框聚焦时触发 | -        |
+
+### 样式变量
+
+组件提供了下列 Less 变量，可用于自定义样式，使用方法请参考[主题定制](#/zh-CN/theme)。
+
+| 名称                                      | 默认值          | 描述 |
+| ----------------------------------------- | --------------- | ---- |
+| @password-input-height                    | `50px`          | -    |
+| @password-input-margin                    | `0 @padding-md` | -    |
+| @password-input-font-size                 | `20px`          | -    |
+| @password-input-border-radius             | `6px`           | -    |
+| @password-input-background-color          | `@white`        | -    |
+| @password-input-info-color                | `@gray-6`       | -    |
+| @password-input-info-font-size            | `@font-size-md` | -    |
+| @password-input-error-info-color          | `@red`          | -    |
+| @password-input-dot-size                  | `10px`          | -    |
+| @password-input-dot-color                 | `@black`        | -    |
+| @password-input-cursor-color              | `@text-color`   | -    |
+| @password-input-cursor-width              | `1px`           | -    |
+| @password-input-cursor-height             | `40%`           | -    |
+| @password-input-cursor-animation-duration | `1s`            | -    |

@@ -1,13 +1,20 @@
 # Swipe
 
+### Intro
+
+Used to loop a group of pictures or content.
+
 ### Install
 
+Register component globally via `app.use`, refer to [Component Registration](#/en-US/advanced-usage#zu-jian-zhu-ce) for more registration ways.
+
 ```js
-import Vue from 'vue';
+import { createApp } from 'vue';
 import { Swipe, SwipeItem } from 'vant';
 
-Vue.use(Swipe);
-Vue.use(SwipeItem);
+const app = createApp();
+app.use(Swipe);
+app.use(SwipeItem);
 ```
 
 ## Usage
@@ -35,32 +42,26 @@ Use `autoplay` prop to set autoplay interval.
 </style>
 ```
 
-### Image Lazyload
+### Lazy Render
 
-Use [Lazyload](#/en-US/lazyload) component to lazyload image.
+Use `lazy-render` prop to enable lazy rendering.
 
 ```html
-<van-swipe>
-  <van-swipe-item v-for="(image, index) in images" :key="index">
-    <img v-lazy="image" />
+<van-swipe :autoplay="3000" lazy-render>
+  <van-swipe-item v-for="image in images" :key="image">
+    <img :src="image" />
   </van-swipe-item>
 </van-swipe>
 ```
 
 ```js
-import Vue from 'vue';
-import { Lazyload } from 'vant';
-
-Vue.use(Lazyload);
-
 export default {
-  data() {
-    return {
-      images: [
-        'https://img.yzcdn.cn/vant/apple-1.jpg',
-        'https://img.yzcdn.cn/vant/apple-2.jpg',
-      ],
-    };
+  setup() {
+    const images = [
+      'https://img.yzcdn.cn/vant/apple-1.jpg',
+      'https://img.yzcdn.cn/vant/apple-2.jpg',
+    ];
+    return { images };
   },
 };
 ```
@@ -80,10 +81,9 @@ export default {
 import { Toast } from 'vant';
 
 export default {
-  methods: {
-    onChange(index) {
-      Toast('Current Swipe index:' + index);
-    },
+  setup() {
+    const onChange = (index) => Toast('Current Swipe index:' + index);
+    return { onChange };
   },
 };
 ```
@@ -115,15 +115,13 @@ export default {
 ### Custom Indicator
 
 ```html
-<van-swipe @change="onChange">
+<van-swipe>
   <van-swipe-item>1</van-swipe-item>
   <van-swipe-item>2</van-swipe-item>
   <van-swipe-item>3</van-swipe-item>
   <van-swipe-item>4</van-swipe-item>
-  <template #indicator>
-    <div class="custom-indicator">
-      {{ current + 1 }}/4
-    </div>
+  <template #indicator="{ active }">
+    <div class="custom-indicator">{{ active + 1 }}/4</div>
   </template>
 </van-swipe>
 
@@ -137,21 +135,6 @@ export default {
     background: rgba(0, 0, 0, 0.1);
   }
 </style>
-```
-
-```js
-export default {
-  data() {
-    return {
-      current: 0,
-    };
-  },
-  methods: {
-    onChange(index) {
-      this.current = index;
-    },
-  },
-};
 ```
 
 ## API
@@ -170,33 +153,33 @@ export default {
 | vertical | Whether to be vertical Scrolling | _boolean_ | `false` |
 | touchable | Whether to allow swipe by touch gesture | _boolean_ | `true` |
 | stop-propagation | Whether to stop touchmove event propagation | _boolean_ | `false` |
-| lazy-render `v2.5.8` | Whether to enable lazy render | _boolean_ | `false` |
+| lazy-render | Whether to enable lazy render | _boolean_ | `false` |
 | indicator-color | Indicator color | _string_ | `#1989fa` |
 
 ### Swipe Events
 
-| Event  | Description                         | Arguments                     |
-| ------ | ----------------------------------- | ----------------------------- |
-| change | Triggered when current swipe change | index: index of current swipe |
+| Event  | Description                        | Arguments                     |
+| ------ | ---------------------------------- | ----------------------------- |
+| change | Emitted when current swipe changed | index: index of current swipe |
 
 ### SwipeItem Events
 
-| Event | Description            | Arguments      |
-| ----- | ---------------------- | -------------- |
-| click | Triggered when clicked | _event: Event_ |
+| Event | Description                       | Arguments           |
+| ----- | --------------------------------- | ------------------- |
+| click | Emitted when component is clicked | _event: MouseEvent_ |
 
 ### Swipe Methods
 
-Use [ref](https://vuejs.org/v2/api/#ref) to get Swipe instance and call instance methods..
+Use [ref](https://v3.vuejs.org/guide/component-template-refs.html) to get Swipe instance and call instance methods..
 
 | Name | Description | Attribute | Return value |
 | --- | --- | --- | --- |
-| prev `v2.4.2` | Swipe to prev item | - | - |
-| next `v2.4.2` | Swipe to next item | - | - |
-| swipeTo | Swipe to target index | index: target index, options: Options | void |
-| resize | Resize Swipe when container element resized | - | void |
+| prev | Swipe to prev item | - | - |
+| next | Swipe to next item | - | - |
+| swipeTo | Swipe to target index | _index: number, options: SwipeToOptions_ | - |
+| resize | Resize Swipe when container element resized or visibility changed | - | - |
 
-### swipeTo Options
+### SwipeToOptions
 
 | Name      | Description               | Type      |
 | --------- | ------------------------- | --------- |
@@ -204,7 +187,20 @@ Use [ref](https://vuejs.org/v2/api/#ref) to get Swipe instance and call instance
 
 ### Swipe Slots
 
-| Name      | Description      |
-| --------- | ---------------- |
-| default   | Content          |
-| indicator | Custom indicator |
+| Name                | Description      | SlotProps            |
+| ------------------- | ---------------- | -------------------- |
+| default             | Content          | -                    |
+| indicator `v3.0.16` | Custom indicator | _{ active: number }_ |
+
+### Less Variables
+
+How to use: [Custom Theme](#/en-US/theme).
+
+| Name                                       | Default Value   | Description |
+| ------------------------------------------ | --------------- | ----------- |
+| @swipe-indicator-size                      | `6px`           | -           |
+| @swipe-indicator-margin                    | `@padding-sm`   | -           |
+| @swipe-indicator-active-opacity            | `1`             | -           |
+| @swipe-indicator-inactive-opacity          | `0.3`           | -           |
+| @swipe-indicator-active-background-color   | `@blue`         | -           |
+| @swipe-indicator-inactive-background-color | `@border-color` | -           |

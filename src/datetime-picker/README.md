@@ -6,11 +6,14 @@ Used to select time, support date and time dimensions, usually used with the [Po
 
 ### Install
 
+Register component globally via `app.use`, refer to [Component Registration](#/en-US/advanced-usage#zu-jian-zhu-ce) for more registration ways.
+
 ```js
-import Vue from 'vue';
+import { createApp } from 'vue';
 import { DatetimePicker } from 'vant';
 
-Vue.use(DatetimePicker);
+const app = createApp();
+app.use(DatetimePicker);
 ```
 
 ## Usage
@@ -28,12 +31,15 @@ Vue.use(DatetimePicker);
 ```
 
 ```js
+import { ref } from 'vue';
+
 export default {
-  data() {
+  setup() {
+    const currentDate = ref(new Date(2021, 0, 17));
     return {
       minDate: new Date(2020, 0, 1),
       maxDate: new Date(2025, 10, 1),
-      currentDate: new Date(),
+      currentDate,
     };
   },
 };
@@ -53,23 +59,28 @@ export default {
 ```
 
 ```js
+import { ref } from 'vue';
+
 export default {
-  data() {
-    return {
-      minDate: new Date(2020, 0, 1),
-      maxDate: new Date(2025, 10, 1),
-      currentDate: new Date(),
-    };
-  },
-  methods: {
-    formatter(type, val) {
+  setup() {
+    const currentDate = ref(new Date());
+
+    const formatter = (type, val) => {
       if (type === 'year') {
         return `${val} Year`;
-      } else if (type === 'month') {
+      }
+      if (type === 'month') {
         return `${val} Month`;
       }
       return val;
-    },
+    };
+
+    return {
+      minDate: new Date(2020, 0, 1),
+      maxDate: new Date(2025, 10, 1),
+      formatter,
+      currentDate,
+    };
   },
 };
 ```
@@ -88,23 +99,28 @@ export default {
 ```
 
 ```js
+import { ref } from 'vue';
+
 export default {
-  data() {
-    return {
-      minDate: new Date(2020, 0, 1),
-      maxDate: new Date(2025, 10, 1),
-      currentDate: new Date(),
-    };
-  },
-  methods: {
-    formatter(type, val) {
+  setup() {
+    const currentDate = ref(new Date());
+
+    const formatter = (type, val) => {
       if (type === 'month') {
         return `${val} Month`;
-      } else if (type === 'day') {
+      }
+      if (type === 'day') {
         return `${val} Day`;
       }
       return val;
-    },
+    };
+
+    return {
+      minDate: new Date(2020, 0, 1),
+      maxDate: new Date(2025, 10, 1),
+      formatter,
+      currentDate,
+    };
   },
 };
 ```
@@ -122,11 +138,12 @@ export default {
 ```
 
 ```js
+import { ref } from 'vue';
+
 export default {
-  data() {
-    return {
-      currentTime: '12:00',
-    };
+  setup() {
+    const currentTime = ref('12:00');
+    return { currentTime };
   },
 };
 ```
@@ -144,12 +161,15 @@ export default {
 ```
 
 ```js
+import { ref } from 'vue';
+
 export default {
-  data() {
+  setup() {
+    const currentDate = ref(new Date());
     return {
       minDate: new Date(2020, 0, 1),
       maxDate: new Date(2025, 10, 1),
-      currentDate: new Date(),
+      currentDate,
     };
   },
 };
@@ -168,12 +188,15 @@ export default {
 ```
 
 ```js
+import { ref } from 'vue';
+
 export default {
-  data() {
+  setup() {
+    const currentDate = ref(new Date());
     return {
       minDate: new Date(2020, 0, 1),
       maxDate: new Date(2025, 10, 1),
-      currentDate: new Date(),
+      currentDate,
     };
   },
 };
@@ -191,19 +214,23 @@ export default {
 ```
 
 ```js
+import { ref } from 'vue';
+
 export default {
-  data() {
-    return {
-      currentTime: '12:00',
-    };
-  },
-  methods: {
-    filter(type, options) {
+  setup() {
+    const currentTime = ref('12:00');
+
+    const filter = (type, options) => {
       if (type === 'minute') {
-        return options.filter((option) => option % 5 === 0);
+        return options.filter((option) => Number(option) % 5 === 0);
       }
       return options;
-    },
+    };
+
+    return {
+      filter,
+      currentTime,
+    };
   },
 };
 ```
@@ -214,21 +241,20 @@ export default {
 <van-datetime-picker
   v-model="currentDate"
   type="date"
-  title="自定义列排序"
+  title="Columns Order"
   :columns-order="['month', 'day', 'year']"
   :formatter="formatter"
 />
 ```
 
 ```js
+import { ref } from 'vue';
+
 export default {
-  data() {
-    return {
-      currentDate: new Date(),
-    };
-  },
-  methods: {
-    formatter(type, val) {
+  setup() {
+    const currentDate = ref(new Date());
+
+    const formatter = (type, val) => {
       if (type === 'year') {
         return val + ' Year';
       }
@@ -239,7 +265,12 @@ export default {
         return val + ' Day';
       }
       return val;
-    },
+    };
+
+    return {
+      formatter,
+      currentDate,
+    };
   },
 };
 ```
@@ -256,11 +287,11 @@ export default {
 | cancel-button-text | Text of cancel button | _string_ | `Cancel` |
 | show-toolbar | Whether to show toolbar | _boolean_ | `true` |
 | loading | Whether to show loading prompt | _boolean_ | `false` |
-| readonly `v2.10.5` | Whether to be readonly | _boolean_ | `false` |
-| filter | Option filter | _(type, vals) => vals_ | - |
-| formatter | Option text formatter | _(type, val) => val_ | - |
-| columns-order `v2.9.2` | Array for ordering columns, where item can be set to<br> `year`, `month`, `day`, `hour` and `minute` | _string[]_ | - |
-| item-height `v2.8.6` | Option height, supports `px` `vw` `rem` unit, default `px` | _number \| string_ | `44` |
+| readonly | Whether to be readonly | _boolean_ | `false` |
+| filter | Option filter | _(type: string, values: string[]) => string[]_ | - |
+| formatter | Option text formatter | _(type: string, value: string) => string_ | - |
+| columns-order | Array for ordering columns, where item can be set to<br> `year`, `month`, `day`, `hour` and `minute` | _string[]_ | - |
+| item-height | Option height, supports `px` `vw` `vh` `rem` unit, default `px` | _number \| string_ | `44` |
 | visible-item-count | Count of visible columns | _number \| string_ | `6` |
 | swipe-duration | Duration of the momentum animation，unit `ms` | _number \| string_ | `1000` |
 
@@ -286,16 +317,28 @@ Following props are supported when the type is time
 
 ### Events
 
-| Event   | Description                         | Arguments               |
-| ------- | ----------------------------------- | ----------------------- |
-| change  | Triggered when value changed        | picker: Picker instance |
-| confirm | Triggered when click confirm button | value: current value    |
-| cancel  | Triggered when click cancel button  | -                       |
+| Event   | Description                                | Arguments            |
+| ------- | ------------------------------------------ | -------------------- |
+| change  | Emitted when value changed                 | value: current value |
+| confirm | Emitted when the confirm button is clicked | value: current value |
+| cancel  | Emitted when the cancel button is clicked  | -                    |
+
+### Slots
+
+| Name           | Description                  | SlotProps                  |
+| -------------- | ---------------------------- | -------------------------- |
+| default        | Custom toolbar content       | -                          |
+| title          | Custom title                 | -                          |
+| confirm        | Custom confirm button text   | -                          |
+| cancel         | Custom cancel button text    | -                          |
+| option         | Custom option content        | _option: string \| object_ |
+| columns-top    | Custom content above columns | -                          |
+| columns-bottom | Custom content below columns | -                          |
 
 ### Methods
 
-Use [ref](https://vuejs.org/v2/api/#ref) to get DatetimePicker instance and call instance methods.
+Use [ref](https://v3.vuejs.org/guide/component-template-refs.html) to get DatetimePicker instance and call instance methods.
 
-| Name               | Description         | Attribute | Return value |
-| ------------------ | ------------------- | --------- | ------------ |
-| getPicker `v2.5.3` | get Picker instance | -         | -            |
+| Name      | Description         | Attribute | Return value |
+| --------- | ------------------- | --------- | ------------ |
+| getPicker | get Picker instance | -         | -            |

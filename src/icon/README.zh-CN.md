@@ -6,21 +6,31 @@
 
 ### 引入
 
+通过以下方式来全局注册组件，更多注册方式请参考[组件注册](#/zh-CN/advanced-usage#zu-jian-zhu-ce)。
+
 ```js
-import Vue from 'vue';
+import { createApp } from 'vue';
 import { Icon } from 'vant';
 
-Vue.use(Icon);
+const app = createApp();
+app.use(Icon);
 ```
 
 ## 代码演示
 
 ### 基础用法
 
-`Icon` 的 `name` 属性支持传入图标名称或图片链接，所有可用的图标名称见右侧示例。
+通过 `name` 属性来指定需要使用的图标，Vant 内置了一套图标库（见右侧示例），可以直接传入对应的名称来使用。
 
 ```html
 <van-icon name="chat-o" />
+```
+
+### 使用图片 URL
+
+你也可以直接在 `name` 属性中传入一个图片 URL 来作为图标。
+
+```html
 <van-icon name="https://b.yzcdn.cn/vant/icon-demo-1126.png" />
 ```
 
@@ -36,27 +46,22 @@ Vue.use(Icon);
 
 ### 图标颜色
 
-`Icon` 的 `color` 属性用来设置图标的颜色。
+通过 `color` 属性来设置图标的颜色。
 
 ```html
-<van-icon name="chat-o" color="#1989fa" />
-<van-icon name="chat-o" color="#07c160" />
+<van-icon name="cart-o" color="#1989fa" />
+<van-icon name="fire-o" color="#ee0a24" />
 ```
 
 ### 图标大小
 
-`Icon` 的 `size` 属性用来设置图标的尺寸大小，默认单位为 `px`。
+通过 `size` 属性来设置图标的尺寸大小，可以指定任意 CSS 单位。
 
 ```html
-<van-icon name="chat-o" size="40" /> <van-icon name="chat-o" size="3rem" />
-```
-
-### 使用本地字体文件
-
-Icon 组件默认引用有赞 CDN 提供的字体文件，并通过网络下载。如果需要在项目中使用本地字体文件，请引入下面的 CSS 文件，并在项目中配置 `url-loader`。
-
-```js
-import 'vant/lib/icon/local.css';
+<!-- 不指定单位，默认使用 px -->
+<van-icon name="chat-o" size="40" />
+<!-- 指定使用 rem 单位 -->
+<van-icon name="chat-o" size="3rem" />
 ```
 
 ### 自定义图标
@@ -92,15 +97,14 @@ import 'vant/lib/icon/local.css';
 | --- | --- | --- | --- |
 | name | 图标名称或图片链接 | _string_ | - |
 | dot | 是否显示图标右上角小红点 | _boolean_ | `false` |
-| badge `v2.5.6` | 图标右上角徽标的内容 | _number \| string_ | - |
-| info | 图标右上角徽标的内容（已废弃，请使用 badge 属性） | _number \| string_ | - |
+| badge | 图标右上角徽标的内容 | _number \| string_ | - |
 | color | 图标颜色 | _string_ | `inherit` |
-| size | 图标大小，如 `20px` `2em`，默认单位为`px` | _number \| string_ | `inherit` |
+| size | 图标大小，如 `20px` `2em`，默认单位为 `px` | _number \| string_ | `inherit` |
 | class-prefix | 类名前缀，用于使用自定义图标 | _string_ | `van-icon` |
-| tag | HTML 标签 | _string_ | `i` |
+| tag | 根节点对应的 HTML 标签名 | _string_ | `i` |
 
 ### Events
 
-| 事件名 | 说明           | 回调参数       |
-| ------ | -------------- | -------------- |
-| click  | 点击图标时触发 | _event: Event_ |
+| 事件名 | 说明           | 回调参数            |
+| ------ | -------------- | ------------------- |
+| click  | 点击图标时触发 | _event: MouseEvent_ |

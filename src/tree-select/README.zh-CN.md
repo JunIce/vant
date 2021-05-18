@@ -1,12 +1,19 @@
 # TreeSelect 分类选择
 
+### 介绍
+
+用于从一组相关联的数据集合中进行选择。
+
 ### 引入
 
+通过以下方式来全局注册组件，更多注册方式请参考[组件注册](#/zh-CN/advanced-usage#zu-jian-zhu-ce)。
+
 ```js
-import Vue from 'vue';
+import { createApp } from 'vue';
 import { TreeSelect } from 'vant';
 
-Vue.use(TreeSelect);
+const app = createApp();
+app.use(TreeSelect);
 ```
 
 ## 代码演示
@@ -17,19 +24,41 @@ Vue.use(TreeSelect);
 
 ```html
 <van-tree-select
+  v-model:active-id="state.activeId"
+  v-model:main-active-index="state.activeIndex"
   :items="items"
-  :active-id.sync="activeId"
-  :main-active-index.sync="activeIndex"
 />
 ```
 
 ```js
+import { reactive } from 'vue';
+
 export default {
-  data() {
-    return {
-      items,
+  setup() {
+    const state = reactive({
       activeId: 1,
       activeIndex: 0,
+    });
+    const items = [
+      {
+        text: '浙江',
+        children: [
+          { text: '杭州', id: 1 },
+          { text: '温州', id: 2 },
+        ],
+      },
+      {
+        text: '江苏',
+        children: [
+          { text: '南京', id: 5 },
+          { text: '无锡', id: 6 },
+        ],
+      },
+    ];
+
+    return {
+      state,
+      items,
     };
   },
 };
@@ -41,19 +70,41 @@ export default {
 
 ```html
 <van-tree-select
+  v-model:active-id="state.activeIds"
+  v-model:main-active-index="state.activeIndex"
   :items="items"
-  :active-id.sync="activeIds"
-  :main-active-index.sync="activeIndex"
 />
 ```
 
 ```js
+import { reactive } from 'vue';
+
 export default {
-  data() {
-    return {
-      items,
-      activeIds: [1, 2],
+  setup() {
+    const state = reactive({
+      activeId: [1, 2],
       activeIndex: 0,
+    });
+    const items = [
+      {
+        text: '浙江',
+        children: [
+          { text: '杭州', id: 1 },
+          { text: '温州', id: 2 },
+        ],
+      },
+      {
+        text: '江苏',
+        children: [
+          { text: '南京', id: 5 },
+          { text: '无锡', id: 6 },
+        ],
+      },
+    ];
+
+    return {
+      state,
+      items,
     };
   },
 };
@@ -64,14 +115,18 @@ export default {
 通过 `content` 插槽可以自定义右侧区域的内容。
 
 ```html
-<van-tree-select height="55vw" :items="items" :main-active-index.sync="active">
+<van-tree-select
+  v-model:main-active-index="activeIndex"
+  height="55vw"
+  :items="items"
+>
   <template #content>
     <van-image
-      v-if="active === 0"
+      v-if="activeIndex === 0"
       src="https://img.yzcdn.cn/vant/apple-1.jpg"
     />
     <van-image
-      v-if="active === 1"
+      v-if="activeIndex === 1"
       src="https://img.yzcdn.cn/vant/apple-2.jpg"
     />
   </template>
@@ -79,10 +134,13 @@ export default {
 ```
 
 ```js
+import { ref } from 'vue';
+
 export default {
-  data() {
+  setup() {
+    const activeIndex = ref(0);
     return {
-      active: 0,
+      activeIndex,
       items: [{ text: '分组 1' }, { text: '分组 2' }],
     };
   },
@@ -95,17 +153,20 @@ export default {
 
 ```html
 <van-tree-select
+  v-model:main-active-index="activeIndex"
   height="55vw"
   :items="items"
-  :main-active-index.sync="activeIndex"
 />
 ```
 
 ```js
+import { ref } from 'vue';
+
 export default {
-  data() {
+  setup() {
+    const activeIndex = ref(0);
     return {
-      activeIndex: 0,
+      activeIndex,
       items: [
         { text: '浙江', children: [], dot: true },
         { text: '江苏', children: [], badge: 5 },
@@ -126,7 +187,7 @@ export default {
 | main-active-index | 左侧选中项的索引 | _number \| string_ | `0` |
 | active-id | 右侧选中项的 id，支持传入数组 | _number \| string \|<br>(number \| string)[]_ | `0` |
 | max | 右侧项最大选中个数 | _number \| string_ | `Infinity` |
-| selected-icon `v2.9.0` | 自定义右侧栏选中状态的图标 | _string_ | `success` |
+| selected-icon | 自定义右侧栏选中状态的图标 | _string_ | `success` |
 
 ### Events
 
@@ -150,7 +211,7 @@ export default {
   {
     // 导航名称
     text: '所有城市',
-    // 导航名称右上角徽标，2.5.6 版本开始支持
+    // 导航名称右上角徽标
     badge: 3,
     // 是否在导航名称右上角显示小红点
     dot: true,
@@ -174,3 +235,18 @@ export default {
   },
 ];
 ```
+
+### 样式变量
+
+组件提供了下列 Less 变量，可用于自定义样式，使用方法请参考[主题定制](#/zh-CN/theme)。
+
+| 名称                                  | 默认值              | 描述 |
+| ------------------------------------- | ------------------- | ---- |
+| @tree-select-font-size                | `@font-size-md`     | -    |
+| @tree-select-nav-background-color     | `@background-color` | -    |
+| @tree-select-content-background-color | `@white`            | -    |
+| @tree-select-nav-item-padding         | `14px @padding-sm`  | -    |
+| @tree-select-item-height              | `48px`              | -    |
+| @tree-select-item-active-color        | `@red`              | -    |
+| @tree-select-item-disabled-color      | `@gray-5`           | -    |
+| @tree-select-item-selected-size       | `16px`              | -    |

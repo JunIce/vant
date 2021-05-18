@@ -1,15 +1,22 @@
 # Lazyload
 
+### Intro
+
+When the page needs to load a large amount of content, delay loading the content outside the visible area of the page to make the page load smoother.
+
 ### Install
 
+Register component globally via `app.use`, refer to [Component Registration](#/en-US/advanced-usage#zu-jian-zhu-ce) for more registration ways.
+
 ```js
-import Vue from 'vue';
+import { createApp } from 'vue';
 import { Lazyload } from 'vant';
 
-Vue.use(Lazyload);
+const app = createApp();
+app.use(Lazyload);
 
 // with options
-Vue.use(Lazyload, {
+app.use(Lazyload, {
   lazyComponent: true,
 });
 ```
@@ -24,7 +31,7 @@ Vue.use(Lazyload, {
 
 ```js
 export default {
-  data() {
+  setup() {
     return {
       imageList: [
         'https://img.yzcdn.cn/vant/apple-1.jpg',
@@ -47,7 +54,7 @@ Use `v-lazy:background-image` to set background url, and declare the height of t
 
 ```js
 // set `lazyComponent` option
-Vue.use(Lazyload, {
+app.use(Lazyload, {
   lazyComponent: true,
 });
 ```

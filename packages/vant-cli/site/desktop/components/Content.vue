@@ -6,7 +6,7 @@
 
 <script>
 export default {
-  name: 'van-doc-content',
+  name: 'VanDocContent',
 
   computed: {
     currentPage() {
@@ -203,7 +203,7 @@ export default {
   }
 
   section {
-    padding: 30px;
+    padding: 24px;
     overflow: hidden;
   }
 

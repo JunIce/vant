@@ -1,68 +1,47 @@
-// Utils
-import { createNamespace } from '../utils';
-import { inherit } from '../utils/functional';
+import { PropType, defineComponent } from 'vue';
+import { createNamespace, extend, unknownProp } from '../utils';
+import { Popup } from '../popup';
+import { popupSharedProps } from '../popup/shared';
 
-// Mixins
-import { popupMixinProps } from '../mixins/popup';
+const [name, bem] = createNamespace('notify');
 
-// Components
-import Popup from '../popup';
+export type NotifyType = 'primary' | 'success' | 'danger' | 'warning';
 
-// Types
-import { CreateElement, RenderContext } from 'vue/types';
-import { DefaultSlots } from '../utils/types';
-import { PopupMixinProps } from '../mixins/popup/type';
+export default defineComponent({
+  name,
 
-export type NotifyProps = PopupMixinProps & {
-  type: 'primary' | 'success' | 'danger' | 'warning';
-  color: string;
-  message: number | string;
-  duration: number | string;
-  className?: any;
-  background: string;
-};
+  props: extend({}, popupSharedProps, {
+    color: String,
+    message: [Number, String],
+    className: unknownProp,
+    background: String,
+    lockScroll: Boolean,
+    type: {
+      type: String as PropType<NotifyType>,
+      default: 'danger',
+    },
+  }),
 
-const [createComponent, bem] = createNamespace('notify');
+  setup(props, { slots }) {
+    return () => {
+      const style = {
+        color: props.color,
+        background: props.background,
+      };
 
-function Notify(
-  h: CreateElement,
-  props: NotifyProps,
-  slots: DefaultSlots,
-  ctx: RenderContext<NotifyProps>
-) {
-  const style = {
-    color: props.color,
-    background: props.background,
-  };
-
-  return (
-    <Popup
-      value={props.value}
-      style={style}
-      position="top"
-      overlay={false}
-      duration={0.2}
-      lockScroll={false}
-      class={[bem([props.type]), props.className]}
-      {...inherit(ctx, true)}
-    >
-      {slots.default?.() || props.message}
-    </Popup>
-  );
-}
-
-Notify.props = {
-  ...popupMixinProps,
-  color: String,
-  message: [Number, String],
-  duration: [Number, String],
-  className: null as any,
-  background: String,
-  getContainer: [String, Function],
-  type: {
-    type: String,
-    default: 'danger',
+      return (
+        <Popup
+          show={props.show}
+          class={[bem([props.type]), props.className]}
+          style={style}
+          overlay={false}
+          position="top"
+          duration={0.2}
+          lockScroll={props.lockScroll}
+        >
+          {slots.default ? slots.default() : props.message}
+        </Popup>
+      );
+    };
   },
-};
-
-export default createComponent<NotifyProps>(Notify);
+});

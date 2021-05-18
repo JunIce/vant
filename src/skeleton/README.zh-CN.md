@@ -1,12 +1,19 @@
 # Skeleton 骨架屏
 
+### 介绍
+
+用于在内容加载过程中展示一组占位图形。
+
 ### 引入
 
+通过以下方式来全局注册组件，更多注册方式请参考[组件注册](#/zh-CN/advanced-usage#zu-jian-zhu-ce)。
+
 ```js
-import Vue from 'vue';
+import { createApp } from 'vue';
 import { Skeleton } from 'vant';
 
-Vue.use(Skeleton);
+const app = createApp();
+app.use(Skeleton);
 ```
 
 ## 代码演示
@@ -38,14 +45,19 @@ Vue.use(Skeleton);
 ```
 
 ```js
+import { ref, onMounted } from 'vue';
+
 export default {
-  data() {
+  setup() {
+    const loading = ref(true);
+
+    onMounted(() => {
+      loading.value = false;
+    });
+
     return {
-      loading: true,
+      loading,
     };
-  },
-  mounted() {
-    this.loading = false;
   },
 };
 ```
@@ -62,7 +74,21 @@ export default {
 | avatar | 是否显示头像占位图 | _boolean_ | `false` |
 | loading | 是否显示骨架屏，传 `false` 时会展示子组件内容 | _boolean_ | `true` |
 | animate | 是否开启动画 | _boolean_ | `true` |
-| round `v2.8.5` | 是否将标题和段落显示为圆角风格 | _boolean_ | `false` |
+| round | 是否将标题和段落显示为圆角风格 | _boolean_ | `false` |
 | title-width | 标题占位图宽度 | _number \| string_ | `40%` |
 | avatar-size | 头像占位图大小 | _number \| string_ | `32px` |
-| avatar-shape | 头像占位图形状，可选值为`square` | _string_ | `round` |
+| avatar-shape | 头像占位图形状，可选值为 `square` | _string_ | `round` |
+
+### 样式变量
+
+组件提供了下列 Less 变量，可用于自定义样式，使用方法请参考[主题定制](#/zh-CN/theme)。
+
+| 名称                              | 默认值          | 描述 |
+| --------------------------------- | --------------- | ---- |
+| @skeleton-row-height              | `16px`          | -    |
+| @skeleton-row-background-color    | `@active-color` | -    |
+| @skeleton-row-margin-top          | `@padding-sm`   | -    |
+| @skeleton-title-width             | `40%`           | -    |
+| @skeleton-avatar-size             | `32px`          | -    |
+| @skeleton-avatar-background-color | `@active-color` | -    |
+| @skeleton-animation-duration      | `1.2s`          | -    |

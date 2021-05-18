@@ -1,13 +1,20 @@
 # Steps 步骤条
 
+### 介绍
+
+用于展示操作流程的各个环节，让用户了解当前的操作在整体流程中的位置。
+
 ### 引入
 
+通过以下方式来全局注册组件，更多注册方式请参考[组件注册](#/zh-CN/advanced-usage#zu-jian-zhu-ce)。
+
 ```js
-import Vue from 'vue';
+import { createApp } from 'vue';
 import { Step, Steps } from 'vant';
 
-Vue.use(Step);
-Vue.use(Steps);
+const app = createApp();
+app.use(Step);
+app.use(Steps);
 ```
 
 ## 代码演示
@@ -26,11 +33,12 @@ Vue.use(Steps);
 ```
 
 ```js
+import { ref } from 'vue';
+
 export default {
-  data() {
-    return {
-      active: 1,
-    };
+  setup() {
+    const active = ref(1);
+    return { active };
   },
 };
 ```
@@ -75,22 +83,44 @@ export default {
 
 | 参数 | 说明 | 类型 | 默认值 |
 | --- | --- | --- | --- |
-| active | 当前步骤 | _number \| string_ | `0` |
-| direction | 显示方向，可选值为 `vertical` | _string_ | `horizontal` |
-| active-color | 激活状态颜色 | _string_ | `#07c160` |
-| inactive-color `v2.9.1` | 未激活状态颜色 | _string_ | `#969799` |
-| active-icon | 激活状态底部图标，可选值见 [Icon 组件](#/zh-CN/icon) | _string_ | `checked` |
-| inactive-icon | 未激活状态底部图标，可选值见 [Icon 组件](#/zh-CN/icon) | _string_ | - |
+| active | 当前步骤对应的索引值 | _number \| string_ | `0` |
+| direction | 步骤条方向，可选值为 `vertical` | _string_ | `horizontal` |
+| active-icon | 当前步骤对应的底部图标，可选值见 [Icon 组件](#/zh-CN/icon) | _string_ | `checked` |
+| inactive-icon | 非当前步骤对应的底部图标，可选值见 [Icon 组件](#/zh-CN/icon) | _string_ | - |
+| finish-icon `v3.0.7` | 已完成步骤对应的底部图标，优先级高于 `inactive-icon`，可选值见 [Icon 组件](#/zh-CN/icon) | _string_ | - |
+| active-color | 当前步骤和已完成步骤的颜色 | _string_ | `#07c160` |
+| inactive-color | 未激活步骤的颜色 | _string_ | `#969799` |
+| icon-prefix `v3.0.15` | 图标类名前缀，同 Icon 组件的 [class-prefix 属性](#/zh-CN/icon#props) | _string_ | `van-icon` |
 
 ### Step Slots
 
-| 名称          | 说明                 |
-| ------------- | -------------------- |
-| active-icon   | 自定义激活状态图标   |
+| 名称 | 说明 |
+| --- | --- |
+| active-icon | 自定义激活状态图标 |
 | inactive-icon | 自定义未激活状态图标 |
+| finish-icon `v3.0.7` | 自定义已完成步骤对应的底部图标，优先级高于 `inactive-icon` | _string_ | - |
 
 ### Steps Events
 
-| 事件名              | 说明                       | 回调参数        |
-| ------------------- | -------------------------- | --------------- |
-| click-step `v2.5.9` | 点击步骤的标题或图标时触发 | _index: number_ |
+| 事件名     | 说明                       | 回调参数        |
+| ---------- | -------------------------- | --------------- |
+| click-step | 点击步骤的标题或图标时触发 | _index: number_ |
+
+### 样式变量
+
+组件提供了下列 Less 变量，可用于自定义样式，使用方法请参考[主题定制](#/zh-CN/theme)。
+
+| 名称                             | 默认值          | 描述 |
+| -------------------------------- | --------------- | ---- |
+| @step-text-color                 | `@gray-6`       | -    |
+| @step-active-color               | `@green`        | -    |
+| @step-process-text-color         | `@text-color`   | -    |
+| @step-font-size                  | `@font-size-md` | -    |
+| @step-line-color                 | `@border-color` | -    |
+| @step-finish-line-color          | `@green`        | -    |
+| @step-finish-text-color          | `@text-color`   | -    |
+| @step-icon-size                  | `12px`          | -    |
+| @step-circle-size                | `5px`           | -    |
+| @step-circle-color               | `@gray-6`       | -    |
+| @step-horizontal-title-font-size | `@font-size-sm` | -    |
+| @steps-background-color          | `@white`        | -    |

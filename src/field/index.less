@@ -1,4 +1,5 @@
-@import '../style/var';
+@import './var.less';
+@import '../cell/var.less';
 
 .van-field {
   &__label {
@@ -15,7 +16,6 @@
     }
 
     &--right {
-      padding-right: @padding-md;
       text-align: right;
     }
   }
@@ -117,7 +117,6 @@
   &__left-icon .van-icon,
   &__right-icon .van-icon {
     display: block;
-    min-width: 1em;
     font-size: @field-icon-size;
     line-height: inherit;
   }

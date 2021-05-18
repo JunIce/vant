@@ -1,12 +1,19 @@
 # Pagination
 
+### Intro
+
+When the amount of data is too much, use pagination to separate the data, and load only one page at a time.
+
 ### Install
 
+Register component globally via `app.use`, refer to [Component Registration](#/en-US/advanced-usage#zu-jian-zhu-ce) for more registration ways.
+
 ```js
-import Vue from 'vue';
+import { createApp } from 'vue';
 import { Pagination } from 'vant';
 
-Vue.use(Pagination);
+const app = createApp();
+app.use(Pagination);
 ```
 
 ## Usage
@@ -18,11 +25,12 @@ Vue.use(Pagination);
 ```
 
 ```js
+import { ref } from 'vue';
+
 export default {
-  data() {
-    return {
-      currentPage: 1,
-    };
+  setup() {
+    const currentPage = ref(1);
+    return { currentPage };
   },
 };
 ```
@@ -76,14 +84,30 @@ export default {
 
 ### Events
 
-| Event  | Description              | Arguments |
-| ------ | ------------------------ | --------- |
-| change | Triggered on page change | -         |
+| Event  | Description                       | Arguments |
+| ------ | --------------------------------- | --------- |
+| change | Emitted when current page changed | -         |
 
 ### Slots
 
 | Name | Description | SlotProps |
 | --- | --- | --- |
-| page `v2.10.9` | Custom pagination item | _{ number: number, text: string, active: boolean }_ |
-| prev-text `v2.10.9` | Custom prev text | `-` |
-| next-text `v2.10.9` | Custom next text | `-` |
+| page | Custom pagination item | _{ number: number, text: string, active: boolean }_ |
+| prev-text | Custom prev text | `-` |
+| next-text | Custom next text | `-` |
+
+### Less Variables
+
+How to use: [Custom Theme](#/en-US/theme).
+
+| Name | Default Value | Description |
+| --- | --- | --- |
+| @pagination-height | `40px` | - |
+| @pagination-font-size | `@font-size-md` | - |
+| @pagination-item-width | `36px` | - |
+| @pagination-item-default-color | `@blue` | - |
+| @pagination-item-disabled-color | `@gray-7` | - |
+| @pagination-item-disabled-background-color | `@background-color` | - |
+| @pagination-background-color | `@white` | - |
+| @pagination-desc-color | `@gray-7` | - |
+| @pagination-disabled-opacity | `@disabled-opacity` | - |

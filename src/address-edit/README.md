@@ -1,12 +1,19 @@
 # AddressEdit
 
+### Intro
+
+Used to create, update, and delete receiving addresses.
+
 ### Install
 
+Register component globally via `app.use`, refer to [Component Registration](#/en-US/advanced-usage#zu-jian-zhu-ce) for more registration ways.
+
 ```js
-import Vue from 'vue';
+import { createApp } from 'vue';
 import { AddressEdit } from 'vant';
 
-Vue.use(AddressEdit);
+const app = createApp();
+app.use(AddressEdit);
 ```
 
 ## Usage
@@ -29,34 +36,35 @@ Vue.use(AddressEdit);
 ```
 
 ```js
+import { ref } from 'vue';
 import { Toast } from 'vant';
 
 export default {
-  data() {
-    return {
-      areaList,
-      searchResult: [],
-    };
-  },
-  methods: {
-    onSave() {
-      Toast('save');
-    },
-    onDelete() {
-      Toast('delete');
-    },
-    onChangeDetail(val) {
+  setup() {
+    const searchResult = ref([]);
+
+    const onSave = () => Toast('save');
+    const onDelete = () => Toast('delete');
+    const onChangeDetail = (val) => {
       if (val) {
-        this.searchResult = [
+        searchResult.value = [
           {
-            name: '黄龙万科中心',
-            address: '杭州市西湖区',
+            name: 'Name1',
+            address: 'Address',
           },
         ];
       } else {
-        this.searchResult = [];
+        searchResult.value = [];
       }
-    },
+    };
+
+    return {
+      onSave,
+      onDelete,
+      areaList,
+      searchResult,
+      onChangeDetail,
+    };
   },
 };
 ```
@@ -69,7 +77,7 @@ export default {
 | --- | --- | --- | --- |
 | area-list | Area List | _object_ | - |
 | area-columns-placeholder | placeholder of area columns | _string[]_ | `[]` |
-| area-placeholder `v2.6.1` | placeholder of area input field | _string_ | `Area` |
+| area-placeholder | placeholder of area input field | _string_ | `Area` |
 | address-info | Address Info | _AddressInfo_ | `{}` |
 | search-result | Address search result | _SearchResult[]_ | `[]` |
 | show-postal | Whether to show postal field | _boolean_ | `false` |
@@ -78,7 +86,7 @@ export default {
 | show-search-result | Whether to show address search result | _boolean_ | `false` |
 | show-area | Whether to show area cell | _boolean_ | `true` |
 | show-detail | Whether to show detail field | _boolean_ | `true` |
-| disable-area `v2.5.0` | Whether to disable area select | _boolean_ | `false` |
+| disable-area | Whether to disable area select | _boolean_ | `false` |
 | save-button-text | Save button text | _string_ | `Save` |
 | delete-button-text | Delete button text | _string_ | `Delete` |
 | detail-rows | Detail input rows | _number \| string_ | `1` |
@@ -86,7 +94,7 @@ export default {
 | is-saving | Whether to show save button loading status | _boolean_ | `false` |
 | is-deleting | Whether to show delete button loading status | _boolean_ | `false` |
 | tel-validator | The method to validate tel | _(tel: string) => boolean_ | - |
-| tel-maxlength `v2.10.0` | Tel maxlength | _number \| string_ | - |
+| tel-maxlength | Tel maxlength | _number \| string_ | - |
 | postal-validator | The method to validate postal | _(tel: string) => boolean_ | - |
 | validator | Custom validator | _(key, val) => string_ | - |
 
@@ -94,15 +102,15 @@ export default {
 
 | Event | Description | Arguments |
 | --- | --- | --- |
-| save | Triggered when click save button | content：form content |
-| focus | Triggered when focus field | key: field name |
-| delete | Triggered when confirm delete | content：form content |
-| cancel-delete | Triggered when cancel delete | content：form content |
-| select-search | Triggered when select search result | value: search content |
-| click-area `v2.5.9` | Triggered when click area | - |
-| change-area | Triggered when change area | values: area values |
-| change-detail | Triggered when address detail changed | value: address detail |
-| change-default | Triggered when switch default address | value: checked |
+| save | Emitted when the save button is clicked | content：form content |
+| focus | Emitted when field is focused | key: field name |
+| delete | Emitted when confirming delete | content：form content |
+| cancel-delete | Emitted when canceling delete | content：form content |
+| select-search | Emitted when a search result is selected | value: search content |
+| click-area | Emitted when the area field is clicked | - |
+| change-area | Emitted when area changed | values: area values |
+| change-detail | Emitted when address detail changed | value: address detail |
+| change-default | Emitted when switching default address | value: checked |
 
 ### Slots
 
@@ -112,7 +120,7 @@ export default {
 
 ### Methods
 
-Use [ref](https://vuejs.org/v2/api/#ref) to get AddressEdit instance and call instance methods.
+Use [ref](https://v3.vuejs.org/guide/component-template-refs.html) to get AddressEdit instance and call instance methods.
 
 | Name             | Description        | Attribute             | Return value |
 | ---------------- | ------------------ | --------------------- | ------------ |
@@ -120,18 +128,17 @@ Use [ref](https://vuejs.org/v2/api/#ref) to get AddressEdit instance and call in
 
 ### AddressInfo Data Structure
 
-| key           | Description        | Type               |
-| ------------- | ------------------ | ------------------ |
-| id            | Address Id         | _number \| string_ |
-| name          | Name               | _string_           |
-| tel           | Phone              | _string_           |
-| province      | Province           | _string_           |
-| city          | City               | _string_           |
-| county        | County             | _string_           |
-| addressDetail | Detailed Address   | _string_           |
-| areaCode      | Area code          | _string_           |
-| postalCode    | Postal code        | _string_           |
-| isDefault     | Is default address | _boolean_          |
+| key           | Description        | Type      |
+| ------------- | ------------------ | --------- |
+| name          | Name               | _string_  |
+| tel           | Phone              | _string_  |
+| province      | Province           | _string_  |
+| city          | City               | _string_  |
+| county        | County             | _string_  |
+| addressDetail | Detailed Address   | _string_  |
+| areaCode      | Area code          | _string_  |
+| postalCode    | Postal code        | _string_  |
+| isDefault     | Is default address | _boolean_ |
 
 ### SearchResult Data Structure
 
@@ -142,4 +149,16 @@ Use [ref](https://vuejs.org/v2/api/#ref) to get AddressEdit instance and call in
 
 ### Area Data Structure
 
-Please refer to [Area](#/en-US/area) component。
+Please refer to [Area](#/en-US/area) component.
+
+### Less Variables
+
+How to use: [Custom Theme](#/en-US/theme).
+
+| Name | Default Value | Description |
+| --- | --- | --- |
+| @address-edit-padding | `@padding-sm` | - |
+| @address-edit-buttons-padding | `@padding-xl @padding-base` | - |
+| @address-edit-button-margin-bottom | `@padding-sm` | - |
+| @address-edit-detail-finish-color | `@blue` | - |
+| @address-edit-detail-finish-font-size | `@font-size-sm` | - |

@@ -6,13 +6,8 @@ import {
   readFileSync,
   outputFileSync,
 } from 'fs-extra';
-import merge from 'webpack-merge';
-import {
-  SRC_DIR,
-  getVantConfig,
-  ROOT_WEBPACK_CONFIG_FILE,
-  ROOT_POSTCSS_CONFIG_FILE,
-} from './constant';
+import { merge } from 'webpack-merge';
+import { SRC_DIR, getVantConfig, ROOT_WEBPACK_CONFIG_FILE } from './constant';
 import { WebpackConfig } from './types';
 
 export const EXT_REGEXP = /\.\w+$/;
@@ -38,6 +33,7 @@ export function hasDefaultExport(code: string) {
 export function getComponents() {
   const EXCLUDES = ['.DS_Store'];
   const dirs = readdirSync(SRC_DIR);
+
   return dirs
     .filter((dir) => !EXCLUDES.includes(dir))
     .filter((dir) =>
@@ -101,7 +97,7 @@ export function normalizePath(path: string): string {
   return path.replace(/\\/g, '/');
 }
 
-export function getWebpackConfig(defaultConfig: WebpackConfig): object {
+export function getWebpackConfig(defaultConfig: WebpackConfig): WebpackConfig {
   if (existsSync(ROOT_WEBPACK_CONFIG_FILE)) {
     const config = require(ROOT_WEBPACK_CONFIG_FILE);
 
@@ -115,14 +111,6 @@ export function getWebpackConfig(defaultConfig: WebpackConfig): object {
   }
 
   return defaultConfig;
-}
-
-export function getPostcssConfig(): object {
-  if (existsSync(ROOT_POSTCSS_CONFIG_FILE)) {
-    return require(ROOT_POSTCSS_CONFIG_FILE);
-  }
-
-  return {};
 }
 
 export type ModuleEnv = 'esmodule' | 'commonjs';

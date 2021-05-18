@@ -1,7 +1,7 @@
-import Vue from 'vue';
-import { Wrapper } from '@vue/test-utils';
+import { ComponentPublicInstance, nextTick } from 'vue';
+import { VueWrapper, DOMWrapper } from '@vue/test-utils';
 
-function getTouch(el: HTMLElement | Window, x: number, y: number) {
+function getTouch(el: Element | Window, x: number, y: number) {
   return {
     identifier: Date.now(),
     target: el,
@@ -18,7 +18,11 @@ function getTouch(el: HTMLElement | Window, x: number, y: number) {
 
 // Trigger pointer/touch event
 export function trigger(
-  wrapper: Wrapper<Vue> | HTMLElement | Window,
+  wrapper:
+    | VueWrapper<ComponentPublicInstance<any, any, any>>
+    | DOMWrapper<Element>
+    | Element
+    | Window,
   eventName: string,
   x = 0,
   y = 0,
@@ -43,18 +47,37 @@ export function trigger(
   });
 
   el.dispatchEvent(event);
+
+  return nextTick();
 }
 
 // simulate drag gesture
 export function triggerDrag(
-  el: Wrapper<Vue> | HTMLElement,
-  x = 0,
-  y = 0
-): void {
-  trigger(el, 'touchstart', 0, 0);
+  el:
+    | VueWrapper<ComponentPublicInstance<any, any, any>>
+    | DOMWrapper<Element>
+    | HTMLElement,
+  relativeX = 0,
+  relativeY = 0
+) {
+  let x = relativeX;
+  let y = relativeY;
+  let startX = 0;
+  let startY = 0;
+  if (relativeX < 0) {
+    startX = Math.abs(relativeX);
+    x = 0;
+  }
+  if (relativeY < 0) {
+    startY = Math.abs(relativeY);
+    y = 0;
+  }
+  trigger(el, 'touchstart', startX, startY);
   trigger(el, 'touchmove', x / 4, y / 4);
   trigger(el, 'touchmove', x / 3, y / 3);
   trigger(el, 'touchmove', x / 2, y / 2);
   trigger(el, 'touchmove', x, y);
   trigger(el, 'touchend', x, y);
+
+  return nextTick();
 }

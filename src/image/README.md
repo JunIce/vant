@@ -1,12 +1,19 @@
 # Image
 
+### Intro
+
+Enhanced img tag with multiple image fill modes, support for image lazy loading, loading hint, loading failure hint.
+
 ### Install
 
+Register component globally via `app.use`, refer to [Component Registration](#/en-US/advanced-usage#zu-jian-zhu-ce) for more registration ways.
+
 ```js
-import Vue from 'vue';
+import { createApp } from 'vue';
 import { Image as VanImage } from 'vant';
 
-Vue.use(VanImage);
+const app = createApp();
+app.use(VanImage);
 ```
 
 ## Usage
@@ -53,10 +60,11 @@ Show round image, it may not works at `fit=contain` and `fit=scale-down`.
 ```
 
 ```js
-import Vue from 'vue';
+import { createApp } from 'vue';
 import { Lazyload } from 'vant';
 
-Vue.use(Lazyload);
+const app = createApp();
+app.use(Lazyload);
 ```
 
 ## API
@@ -75,8 +83,10 @@ Vue.use(Lazyload);
 | lazy-load | Whether to enable lazy load，should register [Lazyload](#/en-US/lazyload) component | _boolean_ | `false` |
 | show-error | Whether to show error placeholder | _boolean_ | `true` |
 | show-loading | Whether to show loading placeholder | _boolean_ | `true` |
-| error-icon `v2.4.2` | Error icon | _string_ | `photo-fail` |
-| loading-icon `v2.4.2` | Loading icon | _string_ | `photo` |
+| error-icon | Error icon | _string_ | `photo-fail` |
+| loading-icon | Loading icon | _string_ | `photo` |
+| icon-size `v3.0.11` | Icon size | _number \| string_ | `32px` |
+| icon-prefix | Icon className prefix | _string_ | `van-icon` |
 
 ### fit optional value
 
@@ -90,16 +100,30 @@ Vue.use(Lazyload);
 
 ### Events
 
-| Event | Description                      | Arguments      |
-| ----- | -------------------------------- | -------------- |
-| click | Triggered when click image       | _event: Event_ |
-| load  | Triggered when image loaded      | -              |
-| error | Triggered when image load failed | -              |
+| Event | Description                    | Arguments           |
+| ----- | ------------------------------ | ------------------- |
+| click | Emitted when image is clicked  | _event: MouseEvent_ |
+| load  | Emitted when image loaded      | -                   |
+| error | Emitted when image load failed | -                   |
 
 ### Slots
 
-| Name             | Description                        |
-| ---------------- | ---------------------------------- |
-| default `v2.9.0` | Custom the content below the image |
-| loading          | Custom loading placeholder         |
-| error            | Custom error placeholder           |
+| Name    | Description                        |
+| ------- | ---------------------------------- |
+| default | Custom the content below the image |
+| loading | Custom loading placeholder         |
+| error   | Custom error placeholder           |
+
+### Less Variables
+
+How to use: [Custom Theme](#/en-US/theme).
+
+| Name                                | Default Value       | Description |
+| ----------------------------------- | ------------------- | ----------- |
+| @image-placeholder-text-color       | `@gray-6`           | -           |
+| @image-placeholder-font-size        | `@font-size-md`     | -           |
+| @image-placeholder-background-color | `@background-color` | -           |
+| @image-loading-icon-size            | `32px`              | -           |
+| @image-loading-icon-color           | `@gray-4`           | -           |
+| @image-error-icon-size              | `32px`              | -           |
+| @image-error-icon-color             | `@gray-4`           | -           |

@@ -6,12 +6,15 @@
 
 ### 引入
 
+通过以下方式来全局注册组件，更多注册方式请参考[组件注册](#/zh-CN/advanced-usage#zu-jian-zhu-ce)。
+
 ```js
-import Vue from 'vue';
+import { createApp } from 'vue';
 import { Grid, GridItem } from 'vant';
 
-Vue.use(Grid);
-Vue.use(GridItem);
+const app = createApp();
+app.use(Grid);
+app.use(GridItem);
 ```
 
 ## 代码演示
@@ -82,7 +85,7 @@ Vue.use(GridItem);
 将 `direction` 属性设置为 `horizontal`，可以让宫格的内容呈横向排列。
 
 ```html
-<van-grid direction="horizontal" :column-num="2">
+<van-grid direction="horizontal" :column-num="3">
   <van-grid-item icon="photo-o" text="文字" />
   <van-grid-item icon="photo-o" text="文字" />
   <van-grid-item icon="photo-o" text="文字" />
@@ -124,7 +127,7 @@ Vue.use(GridItem);
 | center | 是否将格子内容居中显示 | _boolean_ | `true` |
 | square | 是否将格子固定为正方形 | _boolean_ | `false` |
 | clickable | 是否开启格子点击反馈 | _boolean_ | `false` |
-| direction `v2.8.2` | 格子内容排列的方向，可选值为 `horizontal` | _string_ | `vertical` |
+| direction | 格子内容排列的方向，可选值为 `horizontal` | _string_ | `vertical` |
 
 ### GridItem Props
 
@@ -132,19 +135,18 @@ Vue.use(GridItem);
 | --- | --- | --- | --- |
 | text | 文字 | _string_ | - |
 | icon | [图标名称](#/zh-CN/icon)或图片链接 | _string_ | - |
-| icon-prefix `v2.5.3` | 图标类名前缀，同 Icon 组件的 [class-prefix 属性](#/zh-CN/icon#props) | _string_ | `van-icon` |
+| icon-prefix | 图标类名前缀，同 Icon 组件的 [class-prefix 属性](#/zh-CN/icon#props) | _string_ | `van-icon` |
 | dot | 是否显示图标右上角小红点 | _boolean_ | `false` |
-| badge `v2.5.6` | 图标右上角徽标的内容 | _number \| string_ | - |
-| info `2.2.1` | 图标右上角徽标的内容（已废弃，请使用 badge 属性） | _number \| string_ | - |
+| badge | 图标右上角徽标的内容 | _number \| string_ | - |
 | url | 点击后跳转的链接地址 | _string_ | - |
 | to | 点击后跳转的目标路由对象，同 vue-router 的 [to 属性](https://router.vuejs.org/zh/api/#to) | _string \| object_ | - |
 | replace | 是否在跳转时替换当前页面历史 | _boolean_ | `false` |
 
 ### GridItem Events
 
-| 事件名 | 说明           | 回调参数       |
-| ------ | -------------- | -------------- |
-| click  | 点击格子时触发 | _event: Event_ |
+| 事件名 | 说明           | 回调参数            |
+| ------ | -------------- | ------------------- |
+| click  | 点击格子时触发 | _event: MouseEvent_ |
 
 ### GridItem Slots
 
@@ -153,3 +155,16 @@ Vue.use(GridItem);
 | default | 自定义宫格的所有内容 |
 | icon    | 自定义图标           |
 | text    | 自定义文字           |
+
+### 样式变量
+
+组件提供了下列 Less 变量，可用于自定义样式，使用方法请参考[主题定制](#/zh-CN/theme)。
+
+| 名称                                | 默认值                    | 描述 |
+| ----------------------------------- | ------------------------- | ---- |
+| @grid-item-content-padding          | `@padding-md @padding-xs` | -    |
+| @grid-item-content-background-color | `@white`                  | -    |
+| @grid-item-content-active-color     | `@active-color`           | -    |
+| @grid-item-icon-size                | `28px`                    | -    |
+| @grid-item-text-color               | `@gray-7`                 | -    |
+| @grid-item-text-font-size           | `@font-size-sm`           | -    |
